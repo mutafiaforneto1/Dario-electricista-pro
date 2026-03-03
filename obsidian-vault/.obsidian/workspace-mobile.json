@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "04_PLANTILLAS/Nuevo trabajo.md 2.md",
+                "file": "03_ADMIN/Tablero General.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Nuevo trabajo.md 2"
+              "title": "Tablero General"
             }
           }
         ]
@@ -162,11 +162,20 @@
       "daily-notes:Abrir la nota de hoy": false,
       "templates:Insertar plantilla": false,
       "command-palette:Abrir paleta de comandos": false,
-      "bases:Crear nueva base": false
+      "bases:Crear nueva base": false,
+      "templater-obsidian:Templater": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "obsidian-kanban:Create new board": false,
+      "obsidian-full-calendar:Open Full Calendar": false,
+      "obsidian-google-tasks:Google Tasks": false
     }
   },
   "active": "22980d633714596e",
   "lastOpenFiles": [
+    "03_ADMIN/Balance mensual.md",
+    "00_NOTASBotón flotante ()/Caja_diaria.md.md",
+    "04_PLANTILLAS/Nuevo trabajo.md 2.md",
+    "05_DIARIO/2026-03-02-bitacora.md",
     "05_DIARIO/2026-01-19.md",
     "03_ADMIN/Manual de uso.md",
     "03_ADMIN/Tablero General.md",
@@ -175,14 +184,12 @@
     "03_ADMIN/Cliente Tito.md",
     "03_ADMIN/Historial de Trabajos.md",
     "03_ADMIN/log_archivado.md",
-    "03_ADMIN/Balance mensual.md",
     "03_ADMIN",
     "Lienzo.canvas",
     "IMG-20260120-WA0016.jpg",
     "Screenshot_20260121-200135.png",
     "intensidad-de-un-cable-150x300.jpg",
     "00_NOTASBotón flotante ()/Caja_diaria.md ",
-    "00_NOTASBotón flotante ()/Caja_diaria.md.md",
     "00_NOTASBotón flotante ()/70000",
     "00_NOTASBotón flotante ()",
     "02_CLIENTES/Cliente María Rosa.md",
@@ -199,8 +206,6 @@
     "02_CLIENTES/Cliente Andrea deudora.md",
     "02_CLIENTES/Cliente Claudia mamá Mardel.md",
     "02_CLIENTES/Cliente vecino papá de Joaquín.md",
-    "02_CLIENTES/Cliente Brunela di pascuale.md",
-    "02_CLIENTES/Cliente inquilino 2 y 57.md",
     "02_CLIENTES",
     "Tags",
     "Procesos Electricista",
