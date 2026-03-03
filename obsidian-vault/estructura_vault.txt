@@ -1,0 +1,207 @@
+.
+./IMG-20260120-WA0026.jpg
+./06_OBJETIVOS
+./06_OBJETIVOS/Dashboard 2026.md
+./06_OBJETIVOS/Proyecto fondo de retiro.md
+./06_OBJETIVOS/Proyectos con mí novia.md
+./06_OBJETIVOS/Organización diaria.md
+./06_OBJETIVOS/Crecimiento personal.md
+./06_OBJETIVOS/Proyecto la piecita.md
+./diario_sinceridad.md
+./IMG-20260120-WA0013.jpg
+./IMG-20260120-WA0030.jpg
+./2026-01-19.md
+./estructura_vault.txt
+./guía de trabajo.m4a.mp3
+./05_ARCHIVO
+./IMG_20260129_150801_618.jpg
+./Cliente -.md
+./ml_precios.py
+./Scripts
+./01_TRABAJOS
+./01_TRABAJOS/Trabajo mica amiga mica.md
+./01_TRABAJOS/Trabajo Brunela di pascuale.md
+./01_TRABAJOS/Trabajo Marcelo Gualeguaychú.md
+./01_TRABAJOS/Trabajo Machi.md
+./01_TRABAJOS/Trabajo Vicky vecina.md
+./01_TRABAJOS/Trabajo Roberto José gay.md
+./01_TRABAJOS/Trabajo carolina local galería malvinas.md
+./01_TRABAJOS/Juan taxi
+./01_TRABAJOS/Juan taxi/Trabajo Juan taxi parrilla.md
+./01_TRABAJOS/Juan taxi/Trabajo Juan taxi cableado casa.md
+./01_TRABAJOS/Trabajo Edgardo curten.md
+./01_TRABAJOS/Deborah
+./01_TRABAJOS/Deborah/Trabajo Déborah.md
+./01_TRABAJOS/Deborah/Trabajo Déborah fuga de corriente.md
+./01_TRABAJOS/Trabajo Rosa de la 8.md
+./01_TRABAJOS/Romi prima
+./01_TRABAJOS/Romi prima/Trabajo Romi prima.md
+./01_TRABAJOS/Trabajo Luis basualdo.md
+./01_TRABAJOS/Trabajo depto juanete.md
+./01_TRABAJOS/Kame house
+./01_TRABAJOS/Kame house/Trabajo kame house.md
+./01_TRABAJOS/Kame house/Trabajo kame house cocina.md
+./01_TRABAJOS/Tito
+./01_TRABAJOS/Tito/Trabajo Tito casa.md
+./01_TRABAJOS/Tito/Trabajo Tito.md
+./01_TRABAJOS/Trabajo Natalia.md
+./01_TRABAJOS/Trabajo Lorena 123.md
+./01_TRABAJOS/Trabajo Patricia 127.md
+./01_TRABAJOS/César
+./01_TRABAJOS/César/Trabajo César tablero pileta.md
+./01_TRABAJOS/Trabajo Claudia mamá Mardel.md
+./01_TRABAJOS/Kiosco 122 berisso
+./01_TRABAJOS/Kiosco 122 berisso/Kiosco 122 y 78 Berisso.md
+./01_TRABAJOS/Trabajo Andrea deudora.md
+./01_TRABAJOS/Almacén mis soles
+./01_TRABAJOS/Almacén mis soles/Trabajo salón.md
+./01_TRABAJOS/Nina
+./01_TRABAJOS/Nina/Trabajo Nina.md
+./01_TRABAJOS/Trabajo Uru
+./01_TRABAJOS/Trabajo Uru/Uru 11 y 12 febrero.md
+./01_TRABAJOS/Trabajo Uru/Uru.md
+./01_TRABAJOS/Monica
+./01_TRABAJOS/Monica/Colocación de toma.md
+./01_TRABAJOS/Trabajo Guillermo.md
+./01_TRABAJOS/Trabajo María Rosa.md
+./01_TRABAJOS/Trabajo vecino papá de Joaquín.md
+./01_TRABAJOS/Pablo 39 y 26
+./01_TRABAJOS/Pablo 39 y 26/Trabajo Pablo 39 y 26.md
+./04_PLANTILLAS
+./04_PLANTILLAS/Plantilla objetivos.md
+./04_PLANTILLAS/Ficha cliente.md
+./04_PLANTILLAS/Tabla para presupuestos.md
+./04_PLANTILLAS/Nuevo trabajo.md
+./08_PRECIOS
+./08_PRECIOS/Lista de precios maestra.md
+./08_PRECIOS/Electroplat.md
+./08_PRECIOS/Precios_Actualizados.md
+./2026-01-22.md
+./Scripts actualizar py.md
+./Screenshot_20260131-160306.png
+./Manual-de-instrucciones-Timer-digital-riel-DIN.pdf
+./IMG-20260120-WA0018.jpg
+./IMG-20260120-WA0033.jpg
+./IMG-20260120-WA0017.jpg
+./IMG_20260130_123809_578.jpg
+./2026-01-20.md
+./2026-01-21.md
+./07_info técnica
+./07_info técnica/Sección y amperaje soportado.md
+./07_info técnica/Manual de timer 220 riel din.md
+./Procesos Electricista
+./Procesos Electricista/Ley de ohm.md
+./Procesos Electricista/Fugas de Corriente.md
+./Procesos Electricista/Sobrecarga de Circuitos.md
+./Procesos Electricista/Calculo para caídas de tensión.md
+./Procesos Electricista/Normativas Eléctricas La Plata - AEA 90364 y EDELAP.md
+./02_CLIENTES
+./02_CLIENTES/Cliente Luis basualdo.md
+./02_CLIENTES/Pablo 39 y 26.md
+./02_CLIENTES/Cliente inquilino 2 y 57.md
+./02_CLIENTES/Cliente Andrea deudora.md
+./02_CLIENTES/Cliente Roberto José gay.md
+./02_CLIENTES/Cliente Déborah.md
+./02_CLIENTES/Cliente Juan taxi.md
+./02_CLIENTES/Cliente kiosco 122 y 78. Lado Berisso.md
+./02_CLIENTES/Cliente Carolina de 58.md
+./02_CLIENTES/Cliente mica amiga mica.md
+./02_CLIENTES/Cliente Brunela di pascuale.md
+./02_CLIENTES/Cliente Patricia 127.md
+./02_CLIENTES/Cliente Nina.md
+./02_CLIENTES/Cliente Uru.md
+./02_CLIENTES/Cliente kame house.md
+./02_CLIENTES/Cliente Marcelo calle 3.md
+./02_CLIENTES/Cliente César.md
+./02_CLIENTES/Cliente Romi.md
+./02_CLIENTES/Cliente vecino papá de Joaquín.md
+./02_CLIENTES/Cliente Rosa de la 8.md
+./02_CLIENTES/Cliente Guillermo.md
+./02_CLIENTES/Sin título.md
+./02_CLIENTES/Cliente almacén mis soles.md
+./02_CLIENTES/Cliente Mónica.md
+./02_CLIENTES/Cliente Natalia.md
+./02_CLIENTES/Cliente Edgardo curten.md
+./02_CLIENTES/Cliente juanete.md
+./02_CLIENTES/Cliente Lorena de 123.md
+./02_CLIENTES/Cliente María Rosa.md
+./02_CLIENTES/Cliente Vicky vecina.md
+./02_CLIENTES/Cliente Claudia mamá Mardel.md
+./02_CLIENTES/Cliente Tito.md
+./intensidad-de-un-cable-150x300.jpg
+./Screenshot_20260121-200135.png
+./IMG-20260120-WA0016.jpg
+./Precios_MercadoLibre.md
+./03_ADMIN
+./03_ADMIN/Manual de uso.md
+./03_ADMIN/Cliente Tito.md
+./03_ADMIN/Tablero General.md
+./Mis scripts
+--- CONTENIDO DE PLANTILLAS ---
+---
+tipo: cliente
+teléfono: 
+dirección_fija: 
+zona: 
+categoría: 🟢 Particular
+---
+## 🗂️    [[Tablero General]]   
+
+# 👤 Datos del Cliente: {{title}}
+
+### 📞 Contacto y Ubicación
+- **Teléfono:** - **Dirección:** - **Google Maps:** [Link aquí]
+
+### ⚡ Detalles Técnicos del Domicilio
+- **Tipo de Conexión:** (Monofásica / Trifásica)
+- **Ubicación del Tablero Principal:** - **Estado de la Instalación:** (Nueva / Vieja / A reformar)
+- **Notas técnicas:** (Ej: "Tiene térmica general de 25A", "Falta puesta a tierra")
+
+---
+### 🛠️ Historial de Trabajos
+```dataview
+TABLE fecha, estado, mano_de_obra
+FROM "01_TRABAJOS"
+WHERE cliente = this.file.link
+SORT fecha DESC
+---
+tipo: trabajo
+cliente: "[[Cliente - ]]"
+dirección:
+prioridad: 🔵 Media
+fecha: <% tp.date.now("YYYY-MM-DD HH:mm") %>
+estado: 🛠️ En curso
+mano_de_obra: 0
+pagado: false
+---
+
+# 📋 Presupuesto y Tareas
+- [ ] 
+
+# 📦 Materiales
+- 
+
+# 📝 Anotaciones
+(Detalles extra aquí)
+---
+tipo: objetivo
+anio: 2026
+estado: en curso
+vision: 
+progreso: 0
+deadline: 2026-12-31
+---
+
+# 🎯 Objetivo: {{title}}
+
+**Progreso Actual:** INPUT[slider(min(0), max(100), step(5)):progreso] 
+
+> [!info] Visión Relacionada
+> `VIEW[{vision}]`
+
+---
+### 📅 Días restantes: 
+`$= Math.ceil((new Date(dv.current().deadline) - new Date()) / (1000 * 60 * 60 * 24))` días.
+TABLE precio_unitario as "Precio Material", precio_mo as "Mano de Obra"
+FROM "08_PRECIOS/Lista de Precios Maestra"
+WHERE precio_unitario OR precio_mo

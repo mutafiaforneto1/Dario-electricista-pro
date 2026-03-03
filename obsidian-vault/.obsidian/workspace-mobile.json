@@ -1,0 +1,218 @@
+{
+  "main": {
+    "id": "714d0ad500401c28",
+    "type": "split",
+    "children": [
+      {
+        "id": "ee486beba79c1048",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "22980d633714596e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "04_PLANTILLAS/Nuevo trabajo.md 2.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Nuevo trabajo.md 2"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "67eaf1890546b546",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "c0a2090b8bd4e906",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false
+          },
+          "icon": "lucide-folder-closed",
+          "title": "Explorador de archivos"
+        }
+      },
+      {
+        "id": "168e5f44226f3d88",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "Buscar"
+        }
+      },
+      {
+        "id": "760fbee4ce4a27f6",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "Etiquetas"
+        }
+      },
+      {
+        "id": "565c89ef4bef323a",
+        "type": "leaf",
+        "state": {
+          "type": "all-properties",
+          "state": {
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-archive",
+          "title": "Todas las propiedades"
+        }
+      },
+      {
+        "id": "a2e1b058d2805918",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "Marcadores"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "56d32018e05e0292",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "0863ad0e87d94e60",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "Enlaces entrantes"
+        }
+      },
+      {
+        "id": "a5ab7460ab73e595",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "Enlaces salientes"
+        }
+      },
+      {
+        "id": "0ccd0a1095e099a7",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "Esquema"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Crear nueva base": false
+    }
+  },
+  "active": "22980d633714596e",
+  "lastOpenFiles": [
+    "05_DIARIO/2026-01-19.md",
+    "03_ADMIN/Manual de uso.md",
+    "03_ADMIN/Tablero General.md",
+    "03_ADMIN/Estadísticas de trabajo.md",
+    "03_ADMIN/Control de cobros.md",
+    "03_ADMIN/Cliente Tito.md",
+    "03_ADMIN/Historial de Trabajos.md",
+    "03_ADMIN/log_archivado.md",
+    "03_ADMIN/Balance mensual.md",
+    "03_ADMIN",
+    "Lienzo.canvas",
+    "IMG-20260120-WA0016.jpg",
+    "Screenshot_20260121-200135.png",
+    "intensidad-de-un-cable-150x300.jpg",
+    "00_NOTASBotón flotante ()/Caja_diaria.md ",
+    "00_NOTASBotón flotante ()/Caja_diaria.md.md",
+    "00_NOTASBotón flotante ()/70000",
+    "00_NOTASBotón flotante ()",
+    "02_CLIENTES/Cliente María Rosa.md",
+    "02_CLIENTES/Cliente Luis basualdo.md",
+    "02_CLIENTES/Cliente Silvia vecina.md",
+    "02_CLIENTES/Cliente Edgardo curten.md",
+    "02_CLIENTES/Cliente kiosco 122 y 78. Lado Berisso.md",
+    "02_CLIENTES/Cliente Mónica.md",
+    "02_CLIENTES/Marcelo Duros.md",
+    "02_CLIENTES/Cliente Roberto José gay.md",
+    "02_CLIENTES/Cliente Rosa de la 8.md",
+    "02_CLIENTES/Cliente juanete.md",
+    "02_CLIENTES/Cliente Carolina de 58.md",
+    "02_CLIENTES/Cliente Andrea deudora.md",
+    "02_CLIENTES/Cliente Claudia mamá Mardel.md",
+    "02_CLIENTES/Cliente vecino papá de Joaquín.md",
+    "02_CLIENTES/Cliente Brunela di pascuale.md",
+    "02_CLIENTES/Cliente inquilino 2 y 57.md",
+    "02_CLIENTES",
+    "Tags",
+    "Procesos Electricista",
+    "PRESUPUESTO DE SERVICIOS ELÉCTRICOS.pdf",
+    "07_info técnica",
+    "IMG_20260130_123809_578.jpg",
+    "00_NOTAS/Caja_diaria.md ",
+    "IMG-20260120-WA0017.jpg",
+    "IMG-20260120-WA0033.jpg",
+    "IMG-20260120-WA0018.jpg",
+    "Screenshot_20260131-160306.png",
+    "IMG_20260129_150801_618.jpg",
+    "IMG-20260120-WA0030.jpg"
+  ]
+}
