@@ -1,0 +1,118 @@
+import requests
+from bs4 import BeautifulSoup
+import os
+from datetime import datetime
+import time
+
+# ==========================================
+# CONFIGURACIÓN DE RUTAS
+# ==========================================
+# Ruta al Vault en Android (Asegúrate de que sea la correcta)
+VAULT_PATH = "/storage/emulated/0/Documents/Obsidian trabajo optimizado 2"
+FOLDER_PRECIOS = "08_PRECIOS"
+NOMBRE_ARCHIVO = "Lista de Precios DistriElectro.md"
+
+PATH_COMPLETO = os.path.join(VAULT_PATH, FOLDER_PRECIOS, NOMBRE_ARCHIVO)
+
+# ==========================================
+# CATEGORÍAS A MONITOREAR
+# ==========================================
+# Agregamos las URLs de DistriElectro que te interesan
+CATEGORIES = {
+    "Cables Unipolares": "https://distrielectro.com.ar/categoria/conductores-electricos/cables-unipolares/",
+    "Térmicas": "https://distrielectro.com.ar/categoria/proteccion-y-maniobra/interruptores-termomagneticos/",
+    "Disyuntores": "https://distrielectro.com.ar/categoria/proteccion-y-maniobra/interruptores-diferenciales/",
+    "Cajas y Gabinetes": "https://distrielectro.com.ar/categoria/canalizacion/cajas-y-gabinetes/",
+    "Módulos Exultt/Chint": "https://distrielectro.com.ar/categoria/llaves-de-luz/exultt-llaves-de-luz/"
+}
+
+def obtener_precios_de_url(url):
+    """Extrae nombres y precios de los productos de la página"""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=15)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        productos_encontrados = []
+        
+        # Buscamos el contenedor de productos (basado en la estructura típica de WooCommerce que usa DistriElectro)
+        items = soup.find_all('div', class_='product-inner')
+        
+        for item in items:
+            # Extraer nombre
+            nombre_tag = item.find('h2', class_='woocommerce-loop-product__title') or item.find('h3')
+            nombre = nombre_tag.text.strip() if nombre_tag else "Producto sin nombre"
+            
+            # Extraer precio
+            precio_tag = item.find('span', class_='price')
+            precio = precio_tag.text.strip() if precio_tag else "Consultar"
+            
+            # Limpiar el precio (quitar decimales innecesarios si los hay para que sea más legible)
+            precio = precio.replace(',00', '')
+            
+            productos_encontrados.append(f"| {nombre} | {precio} |")
+            
+        return productos_encontrados
+    except Exception as e:
+        print(f"   ⚠️ Error al acceder a {url}: {e}")
+        return []
+
+def ejecutar_actualizacion():
+    print("--------------------------------------------------")
+    print(f"🚀 INICIANDO ACTUALIZADOR DE PRECIOS - {datetime.now().strftime('%H:%M:%S')}")
+    print("--------------------------------------------------")
+    
+    # Verificar si el Vault existe
+    if not os.path.exists(VAULT_PATH):
+        print(f"❌ ERROR: No se puede acceder a la ruta: {VAULT_PATH}")
+        print("Asegúrate de haber ejecutado 'termux-setup-storage' y dar permisos.")
+        return
+
+    # Crear carpeta de precios si no existe
+    dir_precios = os.path.join(VAULT_PATH, FOLDER_PRECIOS)
+    if not os.path.exists(dir_precios):
+        os.makedirs(dir_precios)
+        print(f"📁 Carpeta {FOLDER_PRECIOS} creada.")
+
+    # Iniciar el contenido de la nota
+    contenido_nota = f"# 💰 Precios Actualizados: DistriElectro\n\n"
+    contenido_nota += f"Actualizado automáticamente el: **{datetime.now().strftime('%d/%m/%Y a las %H:%M:%S')}**\n\n"
+    contenido_nota += "> [!info] Sinceridad ante todo\n"
+    contenido_nota += "> Estos precios son referenciales de la web de DistriElectro. Úsalos para estimar, pero verifica antes de cerrar una compra grande.\n\n"
+    
+    total_productos = 0
+
+    for nombre_cat, url in CATEGORIES.items():
+        print(f"🔍 Escaneando: {nombre_cat}...")
+        productos = obtener_precios_de_url(url)
+        
+        if productos:
+            contenido_nota += f"### 📦 {nombre_cat}\n"
+            contenido_nota += "| Producto | Precio Real |\n| :--- | :--- |\n"
+            for p in productos:
+                contenido_nota += p + "\n"
+                total_productos += 1
+            contenido_nota += "\n"
+            print(f"   ✅ Se encontraron {len(productos)} productos.")
+        
+        # Pausa breve para no saturar el servidor y evitar bloqueos
+        time.sleep(1.5)
+
+    # Escribir el archivo
+    try:
+        with open(PATH_COMPLETO, "w", encoding="utf-8") as f:
+            f.write(contenido_nota)
+        print("--------------------------------------------------")
+        print(f"✅ ¡ÉXITO! Se actualizaron {total_productos} productos.")
+        print(f"📄 Nota guardada en: {FOLDER_PRECIOS}/{NOMBRE_ARCHIVO}")
+        print("--------------------------------------------------")
+    except Exception as e:
+        print(f"❌ Error al guardar el archivo: {e}")
+
+if __name__ == "__main__":
+    ejecutar_actualizacion()
+

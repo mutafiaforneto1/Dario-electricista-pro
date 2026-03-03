@@ -1,0 +1,8 @@
+{
+  "googleRefreshToken": "",
+  "googleClientId": "diazgonzalezdario@gmail.com",
+  "googleClientSecret": "My First Project",
+  "askConfirmation": true,
+  "refreshInterval": 60,
+  "showNotice": true
+}

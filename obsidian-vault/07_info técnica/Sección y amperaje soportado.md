@@ -1,0 +1,1 @@
+![[intensidad-de-un-cable-150x300.jpg]]
