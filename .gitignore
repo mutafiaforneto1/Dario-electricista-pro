@@ -34,3 +34,4 @@ trabajos.ics
 
 # Archivos de sistema
 .DS_Store
+.env
