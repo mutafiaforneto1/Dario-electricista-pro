@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"header","type":"text","text":"# CENTRO DE COMANDO\n## Dario Electricista","x":-200,"y":-500,"width":540,"height":80,"color":"1"},
+		{"id":"dashboard","type":"file","file":"00_DASHBOARD.md","x":-800,"y":-380,"width":380,"height":600},
+		{"id":"panel","type":"file","file":"03_ADMIN/Panel de Control.md","x":-380,"y":-380,"width":380,"height":600},
+		{"id":"kanban","type":"file","file":"Tablero Kanban.md","x":20,"y":-380,"width":380,"height":600},
+		{"id":"agenda","type":"file","file":"Agenda Semanal.md","x":420,"y":-380,"width":380,"height":600}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"header","fromSide":"bottom","toNode":"dashboard","toSide":"top"},
+		{"id":"e2","fromNode":"header","fromSide":"bottom","toNode":"panel","toSide":"top"},
+		{"id":"e3","fromNode":"header","fromSide":"bottom","toNode":"kanban","toSide":"top"},
+		{"id":"e4","fromNode":"header","fromSide":"bottom","toNode":"agenda","toSide":"top"}
+	]
+}

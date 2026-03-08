@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Obsidian
+.obsidian/workspace-mobile.json
+.obsidian/workspace.json
+.trash/
+
+# Trabajos de prueba
+obsidian-vault/01_TRABAJOS/clientw*
+obsidian-vault/01_TRABAJOS/pepito*
+obsidian-vault/01_TRABAJOS/jess*
+obsidian-vault/01_TRABAJOS/jzjj*
+obsidian-vault/01_TRABAJOS/otra*
+obsidian-vault/01_TRABAJOS/tulasio/
+obsidian-vault/01_TRABAJOS/LISTA_ACTIVA.md
+obsidian-vault/01_TRABAJOS/Prueba_Hoy.md
+
+# Clientes de prueba
+obsidian-vault/02_CLIENTES/Cliente clientw*
+obsidian-vault/02_CLIENTES/Cliente pepito*
+obsidian-vault/02_CLIENTES/Cliente jzjj*
+obsidian-vault/02_CLIENTES/Cliente otra*
+
+# Fotos (pesadas)
+obsidian-vault/01_TRABAJOS/*/fotos/
+
+# Logs y temporales
+*.log
+*.bak
+trabajos.ics
+
+# Archivos de sistema
+.DS_Store

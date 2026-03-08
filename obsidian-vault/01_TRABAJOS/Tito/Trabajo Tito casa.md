@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[03_ADMIN/Cliente Tito]]"
 dirección:
 prioridad: 🔵 Media
-fecha: 2026-02-04 02:49
-estado: 🛠️ pendiente
+fecha: 2026-02-04
+estado: pendiente
 mano_de_obra: 0
 pagado: false
 ---

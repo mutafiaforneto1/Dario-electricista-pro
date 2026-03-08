@@ -1,0 +1,231 @@
+/* =====================================================
+   vault-global.css — Dario Electricista Pro
+   Estilo global oscuro para todo el vault
+   Archivo: .obsidian/snippets/vault-global.css
+   ===================================================== */
+
+/* ══════════════════════════════════════
+   TÍTULOS CON COLORES
+   ══════════════════════════════════════ */
+
+.markdown-rendered h1 {
+  font-size: 1.6em !important;
+  color: #64B5F6 !important;
+  border-bottom: 2px solid #64B5F6 !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 14px !important;
+}
+
+.markdown-rendered h2 {
+  font-size: 1.2em !important;
+  color: #FFB74D !important;
+  border-left: 4px solid #FFB74D !important;
+  padding-left: 10px !important;
+  margin-top: 18px !important;
+  margin-bottom: 8px !important;
+}
+
+.markdown-rendered h3 {
+  font-size: 1em !important;
+  color: #81C784 !important;
+  border-left: 3px solid #81C784 !important;
+  padding-left: 8px !important;
+  margin-top: 12px !important;
+}
+
+.markdown-rendered h4 {
+  font-size: 0.95em !important;
+  color: #CE93D8 !important;
+}
+
+/* ══════════════════════════════════════
+   TABLAS MÁS BONITAS
+   ══════════════════════════════════════ */
+
+.markdown-rendered table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  font-size: 0.85em !important;
+  margin: 10px 0 !important;
+}
+
+.markdown-rendered table th {
+  background: #1565C0 !important;
+  color: #E3F2FD !important;
+  padding: 8px 10px !important;
+  text-align: left !important;
+  font-size: 0.8em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.markdown-rendered table td {
+  padding: 7px 10px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  color: var(--text-normal) !important;
+}
+
+.markdown-rendered table tr:nth-child(even) td {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+.markdown-rendered table tr:hover td {
+  background: rgba(100,181,246,0.08) !important;
+}
+
+/* ══════════════════════════════════════
+   LISTAS CON ESTILO
+   ══════════════════════════════════════ */
+
+.markdown-rendered ul li {
+  position: relative !important;
+  padding-left: 4px !important;
+  margin-bottom: 3px !important;
+  font-size: 0.92em !important;
+  line-height: 1.5 !important;
+}
+
+.markdown-rendered ul li::marker {
+  color: #64B5F6 !important;
+}
+
+/* Checkboxes pendientes */
+.markdown-rendered .task-list-item:not(.is-checked) {
+  color: var(--text-normal) !important;
+}
+
+/* Checkboxes completados */
+.markdown-rendered .task-list-item.is-checked {
+  color: var(--text-muted) !important;
+  text-decoration: line-through !important;
+}
+
+/* ══════════════════════════════════════
+   NOTAS DE TRABAJO CON DISEÑO
+   ══════════════════════════════════════ */
+
+/* Frontmatter visible y bonito */
+.markdown-rendered .metadata-container {
+  background: rgba(21, 101, 192, 0.15) !important;
+  border: 1px solid rgba(100, 181, 246, 0.3) !important;
+  border-radius: 10px !important;
+  padding: 10px 14px !important;
+  margin-bottom: 16px !important;
+  font-size: 0.82em !important;
+}
+
+.markdown-rendered .metadata-property-key {
+  color: #64B5F6 !important;
+  font-weight: 600 !important;
+}
+
+.markdown-rendered .metadata-property-value {
+  color: var(--text-normal) !important;
+}
+
+/* Blockquotes como alertas */
+.markdown-rendered blockquote {
+  background: rgba(255, 183, 77, 0.08) !important;
+  border-left: 3px solid #FFB74D !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  margin: 8px 0 !important;
+  font-size: 0.88em !important;
+  color: var(--text-muted) !important;
+}
+
+/* Código inline */
+.markdown-rendered code {
+  background: rgba(100, 181, 246, 0.12) !important;
+  color: #64B5F6 !important;
+  border-radius: 4px !important;
+  padding: 1px 5px !important;
+  font-size: 0.85em !important;
+}
+
+/* Bloques de código */
+.markdown-rendered pre {
+  background: #0D1B2A !important;
+  border: 1px solid rgba(100, 181, 246, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-size: 0.82em !important;
+}
+
+/* ══════════════════════════════════════
+   SEPARADORES Y DETALLES
+   ══════════════════════════════════════ */
+
+.markdown-rendered hr {
+  border: none !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+  margin: 14px 0 !important;
+}
+
+/* Links internos */
+.markdown-rendered a.internal-link {
+  color: #64B5F6 !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted rgba(100,181,246,0.4) !important;
+}
+
+/* Links rotos */
+.markdown-rendered a.internal-link.is-unresolved {
+  color: #EF9A9A !important;
+  border-bottom-color: rgba(239,154,154,0.4) !important;
+}
+
+/* Texto en negrita */
+.markdown-rendered strong {
+  color: #FFB74D !important;
+  font-weight: 700 !important;
+}
+
+/* Texto en cursiva */
+.markdown-rendered em {
+  color: #CE93D8 !important;
+}
+
+/* ══════════════════════════════════════
+   DATAVIEW GLOBAL
+   ══════════════════════════════════════ */
+
+.markdown-rendered .dataview.table-view-table {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  font-size: 0.83em !important;
+}
+
+.markdown-rendered .dataview.table-view-table th {
+  background: #1565C0 !important;
+  color: #E3F2FD !important;
+  padding: 8px !important;
+  font-size: 0.78em !important;
+  text-transform: uppercase !important;
+}
+
+.markdown-rendered .dataview.table-view-table td {
+  padding: 7px 10px !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+.markdown-rendered .dataview.table-view-table tr:nth-child(even) td {
+  background: rgba(255,255,255,0.03) !important;
+}
+
+.markdown-rendered .dataview.list-view-ul {
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.markdown-rendered .dataview.list-view-ul li {
+  background: rgba(255,255,255,0.04) !important;
+  border-radius: 7px !important;
+  padding: 7px 12px !important;
+  margin-bottom: 3px !important;
+  border-left: 3px solid #64B5F6 !important;
+  font-size: 0.88em !important;
+}

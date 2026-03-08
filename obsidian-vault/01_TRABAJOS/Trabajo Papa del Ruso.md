@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Trabajo Papa del Ruso]]"
 telefono:
 prioridad: 🔵 Media
-fecha: 2026-02-18 18:45
-estado: 🛠️ terminado
+fecha: 2026-02-18
+estado: terminado
 mano_de_obra: 50000
 costo_materiales: 0
 pagado: true

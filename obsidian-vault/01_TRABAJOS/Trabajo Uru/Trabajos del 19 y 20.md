@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente Uru]]"
 telefono: 54911xxxxxxxx
 prioridad: 🔵 Media
-fecha: 2026-02-23 15:40
-estado: 🛠️ terminado
+fecha: 2026-02-23
+estado: terminado
 mano_de_obra: 125000
 costo_materiales: 0
 pagado: true

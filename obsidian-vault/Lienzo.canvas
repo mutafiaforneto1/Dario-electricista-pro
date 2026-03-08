@@ -1,6 +1,0 @@
-{
-	"nodes":[
-		{"id":"6e0e1230fd6e55eb","type":"text","text":"```dataview\n TABLE \n    cliente as \"Cliente\", \n    fecha as \"Fecha\", \n    total_final as \"Total ($)\",\n    estado as \"Estado\"\nFROM \"01_TRABAJOS\"\nWHERE estado != \"finalizado\"\nSORT fecha desc\n\n```\n\n\n```dataview\njs\nconst p = dv.pages('\"01_TRABAJOS\"').where(p => p.estado == \"pendiente\" || p.estado == \"en_curso\");\nlet total = 0;\np.forEach(page => {\n    if(page.total_final) total += page.total_final;\n});\n\ndv.paragraph(\"### 💵 Total por Cobrar: **$ \" + total.toLocaleString('es-AR') + \"**\");\n\n```","x":-20,"y":14,"width":1380,"height":1846}
-	],
-	"edges":[]
-}

@@ -4,21 +4,28 @@
     "type": "split",
     "children": [
       {
-        "id": "ee486beba79c1048",
+        "id": "053f4527fc7cef8a",
         "type": "tabs",
         "children": [
           {
-            "id": "22980d633714596e",
+            "id": "80d3ddddb064bbc5",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "kanban",
               "state": {
-                "file": "03_ADMIN/Estadísticas de trabajo.md",
-                "mode": "source",
-                "source": false
+                "file": "Tablero Kanban Trabajos.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    true,
+                    true,
+                    true
+                  ]
+                }
               },
-              "icon": "lucide-file",
-              "title": "Estadísticas de trabajo"
+              "icon": "lucide-trello",
+              "title": "Tablero Kanban Trabajos"
             }
           }
         ]
@@ -143,6 +150,7 @@
         "state": {
           "type": "outline",
           "state": {
+            "file": "Untitled Kanban.md",
             "followCursor": false,
             "showSearch": false,
             "searchQuery": ""
@@ -150,9 +158,29 @@
           "icon": "lucide-list",
           "title": "Esquema"
         }
+      },
+      {
+        "id": "6f5acb74aab4357a",
+        "type": "leaf",
+        "state": {
+          "type": "calendar",
+          "state": {},
+          "icon": "calendar-with-checkmark",
+          "title": "Calendar"
+        }
+      },
+      {
+        "id": "f9597a84fc503c44",
+        "type": "leaf",
+        "state": {
+          "type": "googleTaskView",
+          "state": {},
+          "icon": "check-in-circle",
+          "title": "Google Tasks"
+        }
       }
     ],
-    "currentTab": 0
+    "currentTab": 4
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -166,58 +194,62 @@
       "templater-obsidian:Templater": false,
       "table-editor-obsidian:Advanced Tables Toolbar": false,
       "obsidian-kanban:Create new board": false,
-      "obsidian-full-calendar:Open Full Calendar": false,
       "obsidian-google-tasks:Google Tasks": false
     }
   },
-  "active": "22980d633714596e",
+  "active": "80d3ddddb064bbc5",
   "lastOpenFiles": [
-    "00_ÍNDICE_MAESTRO.md",
-    "03_ADMIN/log_archivado.md",
-    "03_ADMIN/TABLERO_GENERAL.md",
+    "Procesos Electricista/Calculo para caídas de tensión.md",
+    "Untitled Kanban.md",
+    "Procesos Electricista/Fugas de Corriente.md",
+    "Procesos Electricista/Ley de ohm.md",
+    "Procesos Electricista/Normativas Eléctricas La Plata - AEA 90364 y EDELAP.md",
     "Procesos Electricista/NORMATIVAS.md",
-    "03_ADMIN/Tablero General.md",
-    "08_PRECIOS/Lista de precios maestra.md",
-    "05_DIARIO/diario_sinceridad.md",
-    "04_PLANTILLAS/NUEVO_TRABAJO.md",
-    "intensidad-de-un-cable-150x300.jpg",
-    "03_ADMIN/Balance mensual.md",
-    "00_NOTASBotón flotante ()/Caja_diaria.md.md",
-    "04_PLANTILLAS/Nuevo trabajo.md 2.md",
-    "05_DIARIO/2026-03-02-bitacora.md",
+    "05_DIARIO/2026-02-23.md",
+    "00_DASHBOARD.md",
+    "08_PRECIOS/Lista de Precios DistriElectro.md",
+    "06_OBJETIVOS/Crecimiento personal.md",
+    "06_OBJETIVOS/Dashboard 2026.md",
+    "06_OBJETIVOS/Proyecto fondo de retiro.md",
+    "05_DIARIO/Semana 2026-03-02.md",
+    "05_DIARIO/PROCESO_ACTIVO.md",
+    "05_DIARIO/2026-02-24.md",
+    "05_DIARIO/2026-01-22.md",
+    "05_DIARIO/2026-01-21.md",
+    "05_DIARIO/2026-01-20.md",
     "05_DIARIO/2026-01-19.md",
-    "03_ADMIN/Manual de uso.md",
-    "03_ADMIN/Estadísticas de trabajo.md",
-    "03_ADMIN/Control de cobros.md",
-    "03_ADMIN/Cliente Tito.md",
-    "03_ADMIN/Historial de Trabajos.md",
+    "01_TRABAJOS/pepito - 2026-03-07.md",
+    "04_PLANTILLAS/Nuevo trabajo.md",
+    "04_PLANTILLAS/NUEVO_TRABAJO.md",
+    "04_PLANTILLAS/Nueva Plantilla Trabajo.md",
+    "04_PLANTILLAS/Nueva_Plantilla_Trabajo.md",
+    "04_PLANTILLAS/Nuevo trabajo.md 2.md",
+    "04_PLANTILLAS/Tabla para presupuestos.md",
+    "01_TRABAJOS/tulasio/fotos/2026-03-07_tienenalgun_problema.jpg",
+    "01_TRABAJOS/tulasio/fotos",
+    "01_TRABAJOS/tulasio",
+    "01_TRABAJOS/Almacén mis soles/fotos/2026-03-07_prueba.jpg",
+    "01_TRABAJOS/Almacén mis soles/fotos",
+    "Centro de Comando.canvas",
+    "Tablero Kanban.canvas",
+    "07_info técnica/PRESUPUESTO DE SERVICIOS ELÉCTRICOS.pdf",
+    "07_INFO_TECNICA",
+    "Agenda Semanal.canvas",
+    "Panel de Control.canvas",
+    "Semana de Trabajo.canvas",
+    "09_SCRIPTS/bashrc_bloque.sh",
+    "09_SCRIPTS/sync_gdrive.sh",
+    "01_TRABAJOS/Veterinaria dig 80 jess",
+    "01_TRABAJOS/Jorgelina y Martín",
+    "intensidad-de-un-cable-150x300.jpg",
     "03_ADMIN",
     "Lienzo.canvas",
     "IMG-20260120-WA0016.jpg",
     "Screenshot_20260121-200135.png",
-    "00_NOTASBotón flotante ()/Caja_diaria.md ",
-    "00_NOTASBotón flotante ()/70000",
-    "00_NOTASBotón flotante ()",
-    "02_CLIENTES/Cliente María Rosa.md",
-    "02_CLIENTES/Cliente Luis basualdo.md",
-    "02_CLIENTES/Cliente Silvia vecina.md",
-    "02_CLIENTES/Cliente Edgardo curten.md",
-    "02_CLIENTES/Cliente kiosco 122 y 78. Lado Berisso.md",
-    "02_CLIENTES/Cliente Mónica.md",
-    "02_CLIENTES/Marcelo Duros.md",
-    "02_CLIENTES/Cliente Roberto José gay.md",
-    "02_CLIENTES",
-    "Tags",
-    "Procesos Electricista",
-    "PRESUPUESTO DE SERVICIOS ELÉCTRICOS.pdf",
-    "07_info técnica",
     "IMG_20260130_123809_578.jpg",
-    "00_NOTAS/Caja_diaria.md ",
     "IMG-20260120-WA0017.jpg",
     "IMG-20260120-WA0033.jpg",
     "IMG-20260120-WA0018.jpg",
-    "Screenshot_20260131-160306.png",
-    "IMG_20260129_150801_618.jpg",
-    "IMG-20260120-WA0030.jpg"
+    "Screenshot_20260131-160306.png"
   ]
 }

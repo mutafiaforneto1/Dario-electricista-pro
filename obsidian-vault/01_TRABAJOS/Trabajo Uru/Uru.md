@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente Uru]]"
 dirección:
 prioridad: 🔵 Media
-fecha: 2026-02-06 15:04
-estado: 🛠️ terminado
+fecha: 2026-02-06
+estado: terminado
 mano_de_obra: 70000
 pagado: true
 ---

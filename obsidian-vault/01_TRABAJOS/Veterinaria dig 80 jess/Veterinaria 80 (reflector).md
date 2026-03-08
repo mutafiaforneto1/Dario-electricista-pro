@@ -1,16 +1,16 @@
 ---
 tipo: trabajo
-cliente: "[[Cliente - ]]"
+cliente: "[[Veterinaria dig 80 jess]]"
 telefono: 54911xxxxxxxx
 prioridad: 🔵 Media
-fecha: <% tp.date.now("YYYY-MM-DD HH:mm") %>
-estado: 🛠️ En curso
+fecha: 2026-03-04
+estado: En curso
 mano_de_obra: 0
 costo_materiales: 0
 pagado: false
 ---
 
-# 📊 Control de Obra: <% tp.file.title %>
+# 📊 Control de Obra: Sin título
 
 # 📝 Detalles del Servicio
 - **Descripción:** - **Urgencia:** # 🛠️ Tareas

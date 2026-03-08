@@ -1,0 +1,130 @@
+/* =====================================================
+   Dashboard CSS — Dario Electricista Pro
+   Compatible con Blue Topaz theme
+   Archivo: .obsidian/snippets/dashboard.css
+   ===================================================== */
+
+/* ── Ocultar propiedades del frontmatter en el dashboard ── */
+.markdown-rendered .metadata-container {
+  display: none;
+}
+
+/* ── Títulos principales más compactos en móvil ── */
+.markdown-rendered h1 {
+  font-size: 1.6em !important;
+  border-bottom: 2px solid var(--color-accent) !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 12px !important;
+}
+
+.markdown-rendered h2 {
+  font-size: 1.1em !important;
+  background: var(--background-secondary) !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  border-left: 4px solid var(--color-accent) !important;
+  margin-top: 16px !important;
+  margin-bottom: 8px !important;
+}
+
+/* ── Tarjetas para tablas Dataview ── */
+.markdown-rendered .dataview.table-view-table {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  border: 1px solid var(--background-modifier-border) !important;
+  width: 100% !important;
+  font-size: 0.85em !important;
+}
+
+.markdown-rendered .dataview.table-view-table th {
+  background: var(--color-accent) !important;
+  color: white !important;
+  padding: 8px !important;
+  font-size: 0.8em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.markdown-rendered .dataview.table-view-table td {
+  padding: 8px !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+.markdown-rendered .dataview.table-view-table tr:nth-child(even) td {
+  background: var(--background-secondary) !important;
+}
+
+.markdown-rendered .dataview.table-view-table tr:hover td {
+  background: var(--background-modifier-hover) !important;
+}
+
+/* ── Listas Dataview como tarjetas ── */
+.markdown-rendered .dataview.list-view-ul {
+  list-style: none !important;
+  padding: 0 !important;
+}
+
+.markdown-rendered .dataview.list-view-ul li {
+  background: var(--background-secondary) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  margin-bottom: 4px !important;
+  border-left: 3px solid var(--color-accent) !important;
+  font-size: 0.9em !important;
+}
+
+/* ── Tabla de accesos rápidos ── */
+.markdown-rendered table {
+  border-collapse: separate !important;
+  border-spacing: 0 4px !important;
+  width: 100% !important;
+}
+
+.markdown-rendered table td {
+  background: var(--background-secondary) !important;
+  padding: 8px 10px !important;
+  border-radius: 6px !important;
+  font-size: 0.85em !important;
+}
+
+.markdown-rendered table th {
+  background: var(--color-accent) !important;
+  color: white !important;
+  padding: 6px 10px !important;
+  font-size: 0.8em !important;
+}
+
+/* ── Callout de actualización automática ── */
+.markdown-rendered blockquote {
+  background: var(--background-secondary) !important;
+  border-left: 3px solid #4CAF50 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 0.8em !important;
+  color: var(--text-muted) !important;
+  margin: 8px 0 !important;
+}
+
+/* ── Separadores más sutiles ── */
+.markdown-rendered hr {
+  border: none !important;
+  border-top: 1px solid var(--background-modifier-border) !important;
+  margin: 12px 0 !important;
+}
+
+/* ── Links internos más visibles ── */
+.markdown-rendered a.internal-link {
+  color: var(--color-accent) !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+}
+
+/* ── Contador en tablas Dataview ── */
+.markdown-rendered .dataview .count {
+  background: var(--color-accent) !important;
+  color: white !important;
+  border-radius: 10px !important;
+  padding: 1px 6px !important;
+  font-size: 0.75em !important;
+  font-weight: bold !important;
+}

@@ -4,7 +4,7 @@ cliente: "[[Cliente Juan taxi]]"
 dirección: 88 e/ 7 y 8
 prioridad: 🔵 Media
 fecha: 2026-01-16
-estado: 🛠️ pendiente
+estado: pendiente
 mano_de_obra: 0
 pagado: false
 ---

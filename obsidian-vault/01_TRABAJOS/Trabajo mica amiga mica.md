@@ -4,7 +4,7 @@ cliente: "[[Cliente mica amiga mica]]"
 dirección: 82 e/122 y 123
 prioridad: 🔵 Media
 fecha: 2026-01-16
-estado: 🛠️ pendiente
+estado: pendiente
 mano_de_obra: 80000
 pagado: false
 fecha_cierre: 2026-02-23

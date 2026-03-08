@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente Silvia vecina]]"
 telefono: +54 9 221 577-3842
 prioridad: 🔵 Media
-fecha: 2026-02-23 15:34
-estado: 🛠️ terminado
+fecha: 2026-02-23
+estado: terminado
 mano_de_obra: 30000
 costo_materiales:
 pagado: true

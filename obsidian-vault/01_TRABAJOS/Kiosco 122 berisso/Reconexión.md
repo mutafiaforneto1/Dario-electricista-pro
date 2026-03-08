@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente kiosco 122 y 78. Lado Berisso]]"
 telefono: +54 9 221 363-0104
 prioridad: 🔵 Media
-fecha: 2026-02-19 18:40
-estado: 🛠️ terminado
+fecha: 2026-02-19
+estado: terminado
 mano_de_obra: 40000
 costo_materiales: 0
 pagado: true

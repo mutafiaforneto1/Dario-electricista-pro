@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente juanete]]"
 telefono: +54 9 221 600-4278
 prioridad: 🔵 Media
-fecha: 2026-02-18 18:55
-estado: 🛠️ terminado
+fecha: 2026-02-18
+estado: terminado
 mano_de_obra: 20000
 costo_materiales: 0
 pagado: true

@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente Julio plomero gasista]]"
 telefono: +54 9 221 585-3069
 prioridad: 🔵 Media
-fecha: 2026-02-18 19:07
-estado: 🛠️ terminado
+fecha: 2026-02-18
+estado: terminado
 mano_de_obra: 40000
 costo_materiales: 0
 pagado: true

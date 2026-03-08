@@ -3,8 +3,8 @@ tipo: trabajo
 cliente: "[[Cliente kame house]]"
 dirección:
 prioridad: 🔵 Media
-fecha: 2026-02-04 03:04
-estado: 🛠️ pendiente
+fecha: 2026-02-04
+estado: pendiente
 mano_de_obra: 0
 pagado: false
 ---

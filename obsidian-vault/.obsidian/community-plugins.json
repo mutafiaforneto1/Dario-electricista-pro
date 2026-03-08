@@ -7,8 +7,9 @@
   "obsidian-style-settings",
   "editing-toolbar",
   "highlightr-plugin",
-  "obsidian-full-calendar",
   "pretty-properties",
   "obsidian-google-tasks",
-  "ical"
+  "ical",
+  "calendar",
+  "obsidian-charts"
 ]

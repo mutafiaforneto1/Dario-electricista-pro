@@ -4,7 +4,7 @@ cliente: "[[02_CLIENTES/Cliente Tito]]"
 dirección:
 prioridad: 🔵 Media
 fecha: 2026-01-17
-estado: 🛠️ terminado
+estado: terminado
 mano_de_obra: 70000
 pagado: true
 ---
