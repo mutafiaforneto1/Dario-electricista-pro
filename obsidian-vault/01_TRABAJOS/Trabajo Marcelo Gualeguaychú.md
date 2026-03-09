@@ -5,7 +5,7 @@ dirección:
 prioridad: 🔵 Media
 fecha: 2026-01-21
 estado: pendiente
-mano_de_obra: 0
+mano_de_obra: 1
 pagado: true
 ---
 

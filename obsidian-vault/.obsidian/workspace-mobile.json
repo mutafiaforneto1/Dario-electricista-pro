@@ -11,21 +11,14 @@
             "id": "80d3ddddb064bbc5",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "markdown",
               "state": {
-                "file": "Tablero Kanban Trabajos.md",
-                "kanbanViewState": {
-                  "kanban-plugin": "board",
-                  "list-collapse": [
-                    false,
-                    true,
-                    true,
-                    true
-                  ]
-                }
+                "file": "01_TRABAJOS/Martín/Martín - 2026-03-09.md",
+                "mode": "preview",
+                "source": false
               },
-              "icon": "lucide-trello",
-              "title": "Tablero Kanban Trabajos"
+              "icon": "lucide-file",
+              "title": "Martín - 2026-03-09"
             }
           }
         ]
@@ -199,6 +192,15 @@
   },
   "active": "80d3ddddb064bbc5",
   "lastOpenFiles": [
+    "01_TRABAJOS/Jorgelina y Martín/Casa de Martín berisso.md",
+    "01_TRABAJOS/Martín Berisso/Martín Berisso - 2026-03-09.md",
+    "01_TRABAJOS/Martín Berisso",
+    "01_TRABAJOS/Rina y Angel/Rina y Angel - 2026-03-09.md",
+    "01_TRABAJOS/Rina y angel - 77 y 126.md",
+    "03_ADMIN/Panel de Control.md",
+    "Tablero Kanban Trabajos.md",
+    "01_TRABAJOS/Martín/Martín - 2026-03-09.md",
+    "01_TRABAJOS/Trabajo Marcelo Gualeguaychú.md",
     "Procesos Electricista/Calculo para caídas de tensión.md",
     "Untitled Kanban.md",
     "Procesos Electricista/Fugas de Corriente.md",
@@ -217,14 +219,6 @@
     "05_DIARIO/2026-01-22.md",
     "05_DIARIO/2026-01-21.md",
     "05_DIARIO/2026-01-20.md",
-    "05_DIARIO/2026-01-19.md",
-    "01_TRABAJOS/pepito - 2026-03-07.md",
-    "04_PLANTILLAS/Nuevo trabajo.md",
-    "04_PLANTILLAS/NUEVO_TRABAJO.md",
-    "04_PLANTILLAS/Nueva Plantilla Trabajo.md",
-    "04_PLANTILLAS/Nueva_Plantilla_Trabajo.md",
-    "04_PLANTILLAS/Nuevo trabajo.md 2.md",
-    "04_PLANTILLAS/Tabla para presupuestos.md",
     "01_TRABAJOS/tulasio/fotos/2026-03-07_tienenalgun_problema.jpg",
     "01_TRABAJOS/tulasio/fotos",
     "01_TRABAJOS/tulasio",
@@ -242,7 +236,6 @@
     "01_TRABAJOS/Veterinaria dig 80 jess",
     "01_TRABAJOS/Jorgelina y Martín",
     "intensidad-de-un-cable-150x300.jpg",
-    "03_ADMIN",
     "Lienzo.canvas",
     "IMG-20260120-WA0016.jpg",
     "Screenshot_20260121-200135.png",

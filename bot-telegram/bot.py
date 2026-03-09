@@ -335,17 +335,41 @@ async def cmd_natural(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     tipo = accion.get("accion", "responder")
 
     if tipo == "crear_trabajo":
-        from utils.vault import crear_trabajo as _crear
-        import sys as _sys
-        _sys.path.insert(0, "/storage/emulated/0/Documents/Dario-electricista-pro/electroapp")
         try:
-            ruta = _crear(
-                accion.get("cliente","?"),
-                accion.get("telefono",""),
-                accion.get("direccion",""),
-                accion.get("descripcion",""),
-                accion.get("monto", 0),
-            )
+            from datetime import date
+            import os
+            cliente = accion.get("cliente","?")
+            descripcion = accion.get("descripcion","")
+            monto = accion.get("monto", 0)
+            fecha = date.today().strftime("%Y-%m-%d")
+            TRABAJOS = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/01_TRABAJOS"
+            carpeta = os.path.join(TRABAJOS, cliente)
+            os.makedirs(carpeta, exist_ok=True)
+            nombre = f"{cliente} - {fecha}.md"
+            ruta = os.path.join(carpeta, nombre)
+            with open(ruta, "w", encoding="utf-8") as f:
+                f.write(f"""---
+tipo: trabajo
+cliente: "[[{cliente}]]"
+fecha: {fecha}
+estado: pendiente
+mano_de_obra: {monto}
+costo_materiales: 0
+pagado: false
+---
+
+# {cliente}
+
+## Descripcion
+{descripcion}
+
+## Tareas
+- [ ]
+
+## Materiales usados
+
+## Notas
+""")
             await update.message.reply_text(
                 f"✅ *Trabajo creado*\n"
                 f"Cliente: {accion.get('cliente')}\n"
@@ -401,6 +425,24 @@ async def cmd_natural(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 f"✅ *Cobrado*\n{t.get('cliente')} — {fmt_pesos(t.get('mano_de_obra',0))}",
                 parse_mode="Markdown"
             )
+
+    elif tipo == "anotar_diario":
+        from datetime import datetime
+        import os
+        DIARIO = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/05_DIARIO"
+        fecha_hoy = datetime.now().strftime("%Y-%m-%d")
+        hora = datetime.now().strftime("%H:%M")
+        archivo = os.path.join(DIARIO, f"{fecha_hoy}.md")
+        nota = accion.get("texto", mensaje)
+        if not os.path.exists(archivo):
+            with open(archivo, "w", encoding="utf-8") as f:
+                f.write(f"# Diario {fecha_hoy}\n\n## Notas\n")
+        with open(archivo, "a", encoding="utf-8") as f:
+            f.write(f"- {hora}: {nota}\n")
+        await update.message.reply_text(
+            f"✅ *Anotado en el diario*\n🕐 {hora} — {nota}",
+            parse_mode="Markdown"
+        )
 
     else:
         texto = accion.get("texto", "No entendí. Usá /ayuda para ver los comandos.")

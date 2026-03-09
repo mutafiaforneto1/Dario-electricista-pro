@@ -5,7 +5,7 @@ direccion: 77 y 126
 fecha_inicio: 2026-03-02
 estado: presupuesto
 pagado: false
-fecha: 2026-03-02
+fecha: 2026-03-07
 mano_de_obra: 0
 ---
 

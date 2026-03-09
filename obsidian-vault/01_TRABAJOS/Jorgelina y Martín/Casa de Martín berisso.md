@@ -3,7 +3,7 @@ tipo: trabajo
 cliente: "[[Cliente Jorgelina y Martín]]"
 telefono: +54 9 221 600-6840
 prioridad: 🔵 Media
-fecha: 2026-03-07
+fecha: 2026-03-10
 estado: En curso
 mano_de_obra: 50000
 costo_materiales: 0
