@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 import os, re, logging
+try:
+    from dotenv import load_dotenv
+    load_dotenv("/storage/emulated/0/Documents/Dario-electricista-pro/.env")
+except: pass
 from datetime import date, datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
@@ -518,7 +522,7 @@ async def cmd_presupuesto_ia(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         precios_texto = ""
 
     import groq
-    client = groq.Groq(api_key="os.getenv("GROQ_API_KEY")")
+    client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     tarifas_texto = "\n".join([f"- {k}: ${v}" for k,v in TARIFAS_MO.items()])
 
@@ -608,7 +612,7 @@ async def cmd_mensaje(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✍️ Redactando mensaje...")
 
     import groq, re, subprocess
-    client = groq.Groq(api_key="os.getenv("GROQ_API_KEY")")
+    client = groq.Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     prompt = (
         "Sos Dario, electricista en La Plata. Escribis el mensaje vos mismo, en primera persona.\n"
