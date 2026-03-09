@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 import os, re, logging
+
+# Cargar variables de entorno
+_env = "/storage/emulated/0/Documents/Dario-electricista-pro/.env"
+if os.path.exists(_env):
+    with open(_env) as _f:
+        for _l in _f:
+            if "=" in _l and not _l.startswith("#"):
+                k, v = _l.strip().split("=", 1)
+                os.environ[k] = v
 try:
     from dotenv import load_dotenv
     load_dotenv("/storage/emulated/0/Documents/Dario-electricista-pro/.env")
@@ -647,6 +656,429 @@ async def cmd_mensaje(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     except:
         pass
 
+
+async def cmd_materiales(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    if not ctx.args:
+        await update.message.reply_text(
+            "Uso: /materiales descripcion del trabajo\n\n"
+            "Ejemplo:\n/materiales instalar 4 tomas y 2 llaves en living"
+        )
+        return
+
+    descripcion = " ".join(ctx.args)
+    await update.message.reply_text("📦 Calculando materiales...")
+
+    import groq, re, json, os
+    api_key = os.getenv("GROQ_API_KEY")
+    client = groq.Groq(api_key=api_key)
+
+    PRECIOS_MD = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/08_PRECIOS/Precios_Actualizados.md"
+    try:
+        with open(PRECIOS_MD, encoding="utf-8") as f:
+            precios_texto = f.read()[:3000]
+    except:
+        precios_texto = ""
+
+    prompt = (
+        "Sos un electricista experto en La Plata, Argentina.\n"
+        "Arma la lista de materiales necesarios para el trabajo descrito.\n"
+        "Usá los precios de la lista cuando estén disponibles.\n\n"
+        "LISTA DE PRECIOS DISPONIBLES:\n" + precios_texto + "\n\n"
+        "TRABAJO: " + descripcion + "\n\n"
+        "Respondé SOLO con JSON valido:\n"
+        '{"materiales": [{"item": "nombre", "cantidad": 1, "unidad": "u/m/kg", "precio_unit": 0, "nota": "opcional"}], '
+        '"observaciones": "consejos o advertencias del trabajo"}'
+    )
+
+    try:
+        chat = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2, max_tokens=600,
+        )
+        respuesta = re.sub("```json|```", "", chat.choices[0].message.content.strip()).strip()
+        data = json.loads(respuesta)
+    except Exception as e:
+        await update.message.reply_text("❌ Error: " + str(e))
+        return
+
+    materiales = data.get("materiales", [])
+    total = sum(int(m.get("cantidad",1)) * int(m.get("precio_unit",0)) for m in materiales)
+
+    lineas = [f"📦 *Lista de materiales*\n_{descripcion}_\n─────────────────────"]
+    for m in materiales:
+        cant = m.get("cantidad", 1)
+        precio = int(m.get("precio_unit", 0))
+        subtotal = cant * precio
+        linea = f"• {m.get('item')} x{cant} {m.get('unidad','u')}"
+        if precio > 0:
+            linea += f" — ${subtotal:,}".replace(",",".")
+        if m.get("nota"):
+            linea += f"\n  _{m.get('nota')}_"
+        lineas.append(linea)
+
+    if total > 0:
+        lineas.append(f"─────────────────────\n💵 Total materiales: *${total:,}*".replace(",","."))
+
+    if data.get("observaciones"):
+        lineas.append(f"\n⚠️ {data.get('observaciones')}")
+
+    await update.message.reply_text("\n".join(lineas), parse_mode="Markdown")
+
+
+async def cmd_buscar(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    if not ctx.args:
+        await update.message.reply_text(
+            "Uso: /buscar consulta\n\n"
+            "Ejemplos:\n"
+            "/buscar trabajos de tablero\n"
+            "/buscar clientes que no pagaron\n"
+            "/buscar problemas con termicas"
+        )
+        return
+
+    consulta = " ".join(ctx.args)
+    await update.message.reply_text("🔍 Buscando en tus notas...")
+
+    import groq, re, json, os
+    TRABAJOS = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/01_TRABAJOS"
+    DIARIO = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/05_DIARIO"
+
+    # Leer todos los trabajos
+    notas = []
+    for root, dirs, files in os.walk(TRABAJOS):
+        dirs[:] = [d for d in dirs if d != "fotos"]
+        for f in files:
+            if not f.endswith(".md"): continue
+            try:
+                with open(os.path.join(root, f), encoding="utf-8") as fh:
+                    texto = fh.read()
+                notas.append({"archivo": f.replace(".md",""), "contenido": texto[:500]})
+            except: pass
+
+    # Leer ultimas notas del diario
+    diario = []
+    try:
+        for f in sorted(os.listdir(DIARIO))[-7:]:
+            if f.endswith(".md"):
+                with open(os.path.join(DIARIO, f), encoding="utf-8") as fh:
+                    diario.append(fh.read()[:300])
+    except: pass
+
+    notas_texto = "\n---\n".join([
+        f"TRABAJO: {n['archivo']}\n{n['contenido']}" for n in notas[:20]
+    ])
+    diario_texto = "\n---\n".join(diario)
+
+    api_key = os.getenv("GROQ_API_KEY")
+    client = groq.Groq(api_key=api_key)
+
+    prompt = (
+        "Sos el asistente de Dario, electricista en La Plata.\n"
+        "Busca en sus notas y responde la consulta de forma util y concreta.\n\n"
+        "TRABAJOS REGISTRADOS:\n" + notas_texto + "\n\n"
+        "DIARIO RECIENTE:\n" + diario_texto + "\n\n"
+        "CONSULTA: " + consulta + "\n\n"
+        "Responde en español argentino, maximo 10 lineas, directo y util.\n"
+        "Si encontras trabajos relevantes, mencionalos con cliente y fecha."
+    )
+
+    try:
+        chat = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3, max_tokens=500,
+        )
+        respuesta = chat.choices[0].message.content.strip()
+    except Exception as e:
+        await update.message.reply_text("❌ Error: " + str(e))
+        return
+
+    await update.message.reply_text(
+        f"🔍 *Resultados para:* _{consulta}_\n─────────────────────\n{respuesta}",
+        parse_mode="Markdown"
+    )
+
+
+async def cmd_clientes_ia(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("👥 Analizando tus clientes...")
+
+    import groq, os, re
+    from datetime import date
+
+    trabajos = get_trabajos()
+    if not trabajos:
+        await update.message.reply_text("No hay trabajos registrados.")
+        return
+
+    # Agrupar por cliente
+    por_cliente = {}
+    for t in trabajos:
+        cliente = t.get("cliente","?")
+        if cliente not in por_cliente:
+            por_cliente[cliente] = {"trabajos": 0, "total": 0, "cobrado": 0, "fechas": []}
+        por_cliente[cliente]["trabajos"] += 1
+        monto = int(t.get("mano_de_obra", 0))
+        por_cliente[cliente]["total"] += monto
+        if t.get("pagado") == "true":
+            por_cliente[cliente]["cobrado"] += monto
+        if t.get("fecha"):
+            por_cliente[cliente]["fechas"].append(t.get("fecha"))
+
+    # Ordenar por total
+    ranking = sorted(por_cliente.items(), key=lambda x: x[1]["total"], reverse=True)
+
+    resumen = "\n".join([
+        f"{c}: {d['trabajos']} trabajos, ${d['total']} facturado, ${d['cobrado']} cobrado"
+        for c, d in ranking[:15]
+    ])
+
+    api_key = os.getenv("GROQ_API_KEY")
+    client = groq.Groq(api_key=api_key)
+
+    prompt = (
+        "Sos el asistente de Dario, electricista en La Plata.\n"
+        "Analiza sus clientes y da un informe util.\n\n"
+        "DATOS POR CLIENTE:\n" + resumen + "\n\n"
+        "Responde en español argentino con:\n"
+        "1. Top 3 mejores clientes\n"
+        "2. Clientes que deben plata\n"
+        "3. Clientes mas frecuentes\n"
+        "4. Consejo concreto para el negocio\n"
+        "Maximo 12 lineas, directo y util."
+    )
+
+    try:
+        chat = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3, max_tokens=500,
+        )
+        respuesta = chat.choices[0].message.content.strip()
+    except Exception as e:
+        await update.message.reply_text("❌ Error: " + str(e))
+        return
+
+    # Top clientes como tabla
+    top = ranking[:5]
+    lineas = ["👥 *Análisis de clientes*\n─────────────────────"]
+    for c, d in top:
+        pagado_pct = int(d["cobrado"]/d["total"]*100) if d["total"] > 0 else 0
+        emoji = "⭐" if pagado_pct == 100 else "⚠️" if pagado_pct == 0 else "🔶"
+        lineas.append(f"{emoji} *{c}*: {d['trabajos']} trabajos — {fmt_pesos(d['total'])}")
+
+    lineas.append("─────────────────────\n" + respuesta)
+    await update.message.reply_text("\n".join(lineas), parse_mode="Markdown")
+
+
+async def cmd_prediccion(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔮 Analizando tendencias...")
+
+    import groq, os
+    from datetime import date, timedelta
+
+    trabajos = get_trabajos()
+    if not trabajos:
+        await update.message.reply_text("No hay trabajos registrados.")
+        return
+
+    # Agrupar por mes
+    por_mes = {}
+    for t in trabajos:
+        mes = t.get("fecha","")[:7]
+        if not mes: continue
+        if mes not in por_mes:
+            por_mes[mes] = {"total": 0, "cantidad": 0, "cobrado": 0}
+        monto = int(t.get("mano_de_obra", 0))
+        por_mes[mes]["total"] += monto
+        por_mes[mes]["cantidad"] += 1
+        if t.get("pagado") == "true":
+            por_mes[mes]["cobrado"] += monto
+
+    # Mes actual y siguiente
+    hoy = date.today()
+    mes_actual = hoy.strftime("%Y-%m")
+    mes_siguiente = (hoy.replace(day=1) + timedelta(days=32)).strftime("%Y-%m")
+    dias_transcurridos = hoy.day
+    import calendar
+    dias_mes = calendar.monthrange(hoy.year, hoy.month)[1]
+
+    resumen = "\n".join([
+        f"{mes}: {d['cantidad']} trabajos, ${d['total']}, cobrado ${d['cobrado']}"
+        for mes, d in sorted(por_mes.items())
+    ])
+
+    # Proyeccion simple del mes actual
+    total_actual = por_mes.get(mes_actual, {}).get("total", 0)
+    proyeccion_mes = int(total_actual * dias_mes / dias_transcurridos) if dias_transcurridos > 0 else 0
+
+    api_key = os.getenv("GROQ_API_KEY")
+    client = groq.Groq(api_key=api_key)
+
+    prompt = (
+        "Sos el asistente financiero de Dario, electricista en La Plata.\n"
+        "Analiza su historial y predice sus ingresos futuros.\n\n"
+        "HISTORIAL POR MES:\n" + resumen + "\n\n"
+        f"Hoy es {hoy.strftime('%d/%m/%Y')}, dia {dias_transcurridos} de {dias_mes}.\n"
+        f"Lo que lleva este mes ({mes_actual}): ${total_actual}\n"
+        f"Proyeccion lineal del mes actual: ${proyeccion_mes}\n\n"
+        "Responde en español argentino con:\n"
+        f"1. Estimacion de cierre de {mes_actual}\n"
+        f"2. Prediccion para {mes_siguiente}\n"
+        "3. Tendencia general\n"
+        "4. Consejo para mejorar ingresos\n"
+        "Maximo 10 lineas, directo y concreto."
+    )
+
+    try:
+        chat = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3, max_tokens=400,
+        )
+        respuesta = chat.choices[0].message.content.strip()
+    except Exception as e:
+        await update.message.reply_text("❌ Error: " + str(e))
+        return
+
+    msg = (
+        f"🔮 Prediccion de ingresos\n"
+        f"─────────────────────\n"
+        f"Este mes llevas: {fmt_pesos(total_actual)}\n"
+        f"Proyeccion al cierre: {fmt_pesos(proyeccion_mes)}\n"
+        f"─────────────────────\n"
+        f"{respuesta}"
+    )
+
+    await update.message.reply_text(msg)
+
+
+async def cmd_recibo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    if not ctx.args:
+        await update.message.reply_text(
+            "Uso: /recibo cliente, descripcion, monto\n\n"
+            "Ejemplo:\n/recibo Tito, instalacion de tablero 12 bocas, 320000"
+        )
+        return
+
+    texto = " ".join(ctx.args)
+    partes = [p.strip() for p in texto.split(",")]
+    if len(partes) < 3:
+        await update.message.reply_text("Faltan datos. Usá: /recibo cliente, descripcion, monto")
+        return
+
+    cliente = partes[0]
+    descripcion = partes[1]
+    try:
+        monto = int(partes[2].replace(".","").replace("$",""))
+    except:
+        monto = 0
+
+    await update.message.reply_text("📄 Generando recibo...")
+
+    import os
+    from datetime import date
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import cm
+
+    fecha = date.today().strftime("%d/%m/%Y")
+    numero = date.today().strftime("%Y%m%d") + str(abs(hash(cliente)))[-4:]
+    output = f"/data/data/com.termux/files/home/recibo_{cliente.replace(' ','_')}_{date.today().strftime('%Y%m%d')}.pdf"
+
+    doc = SimpleDocTemplate(output, pagesize=A4,
+        rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+
+    styles = getSampleStyleSheet()
+    elementos = []
+
+    # Header
+    estilo_titulo = ParagraphStyle("titulo", fontSize=20, fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#1a1a2e"), spaceAfter=5)
+    estilo_sub = ParagraphStyle("sub", fontSize=11, fontName="Helvetica",
+        textColor=colors.HexColor("#444444"), spaceAfter=3)
+    estilo_normal = ParagraphStyle("normal", fontSize=10, fontName="Helvetica",
+        textColor=colors.HexColor("#333333"))
+
+    elementos.append(Paragraph("⚡ DARIO ELECTRICISTA", estilo_titulo))
+    elementos.append(Paragraph("La Plata, Buenos Aires", estilo_sub))
+    elementos.append(Paragraph("Matrícula AAIERIC", estilo_sub))
+    elementos.append(Spacer(1, 0.5*cm))
+
+    # Linea divisoria
+    tabla_linea = Table([[""]],colWidths=[17*cm])
+    tabla_linea.setStyle(TableStyle([
+        ("LINEABOVE", (0,0), (-1,0), 2, colors.HexColor("#f0a500")),
+    ]))
+    elementos.append(tabla_linea)
+    elementos.append(Spacer(1, 0.5*cm))
+
+    # Datos del recibo
+    datos = [
+        ["RECIBO DE PAGO", ""],
+        ["N°:", numero],
+        ["Fecha:", fecha],
+        ["Cliente:", cliente],
+    ]
+    tabla_datos = Table(datos, colWidths=[4*cm, 13*cm])
+    tabla_datos.setStyle(TableStyle([
+        ("FONTNAME", (0,0), (0,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("FONTSIZE", (0,0), (-1,0), 14),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.HexColor("#1a1a2e")),
+        ("SPAN", (0,0), (-1,0)),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+    ]))
+    elementos.append(tabla_datos)
+    elementos.append(Spacer(1, 0.5*cm))
+
+    # Detalle
+    detalle = [
+        ["Descripcion", "Monto"],
+        [descripcion, f"$ {monto:,}".replace(",",".")],
+        ["", ""],
+        ["TOTAL", f"$ {monto:,}".replace(",",".")],
+    ]
+    tabla_detalle = Table(detalle, colWidths=[12*cm, 5*cm])
+    tabla_detalle.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#1a1a2e")),
+        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTNAME", (0,-1), (-1,-1), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,-1), 10),
+        ("FONTSIZE", (0,-1), (-1,-1), 12),
+        ("BACKGROUND", (0,-1), (-1,-1), colors.HexColor("#f0a500")),
+        ("TEXTCOLOR", (0,-1), (-1,-1), colors.white),
+        ("ALIGN", (1,0), (1,-1), "RIGHT"),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#dddddd")),
+        ("ROWBACKGROUNDS", (0,1), (-1,-2), [colors.white, colors.HexColor("#f9f9f9")]),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 8),
+        ("TOPPADDING", (0,0), (-1,-1), 8),
+        ("LEFTPADDING", (0,0), (-1,-1), 8),
+    ]))
+    elementos.append(tabla_detalle)
+    elementos.append(Spacer(1, 1*cm))
+
+    # Firma
+    elementos.append(Paragraph("_______________________________", estilo_normal))
+    elementos.append(Paragraph("Dario — Electricista Matriculado", estilo_normal))
+    elementos.append(Spacer(1, 0.3*cm))
+    elementos.append(Paragraph("Gracias por confiar en nuestro servicio ⚡", estilo_sub))
+
+    doc.build(elementos)
+
+    # Enviar PDF por Telegram
+    with open(output, "rb") as pdf:
+        await update.message.reply_document(
+            document=pdf,
+            filename=f"Recibo_{cliente}_{fecha.replace('/','_')}.pdf",
+            caption=f"📄 Recibo para {cliente} — ${monto:,}\nFecha: {fecha}".replace(",",".")
+        )
+
+    os.remove(output)
+
 def main():
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", cmd_start))
@@ -666,6 +1098,11 @@ def main():
     app.add_handler(CommandHandler("analisis", cmd_analisis))
     app.add_handler(CommandHandler("presupuesto", cmd_presupuesto_ia))
     app.add_handler(CommandHandler("mensaje", cmd_mensaje))
+    app.add_handler(CommandHandler("materiales", cmd_materiales))
+    app.add_handler(CommandHandler("buscar", cmd_buscar))
+    app.add_handler(CommandHandler("clientes_ia", cmd_clientes_ia))
+    app.add_handler(CommandHandler("prediccion", cmd_prediccion))
+    app.add_handler(CommandHandler("recibo", cmd_recibo))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, cmd_natural))
     print("Bot iniciado. Esperando comandos...")
     log_evento("Bot iniciado")
