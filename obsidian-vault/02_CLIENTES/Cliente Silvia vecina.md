@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono: +54 9 221 577-3842
 dirección_fija: 76 bis e/ 125 y 125 A n420
-zona:
+zona: Periferia
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

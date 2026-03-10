@@ -4,19 +4,19 @@ cliente: "[[Cliente Marcelo calle 3]]"
 dirección:
 prioridad: 🔵 Media
 fecha: 2026-01-21
-estado: pendiente
+estado: terminado
 mano_de_obra: 1
 pagado: true
 ---
 
 # 📋 Presupuesto y Tareas
-- [ ] reubicar dos cámaras de video
-- [ ] cablear desde la tecla que da luz a la luminaria que está al lado de las cámaras para independizar alimentación. 
-- [ ] colocar fotocélula a las luminarias del frente (foto adjunta). Remplazar focos defectuosos, solo los que apuntan para abajo.
-- [ ] En el living hay un toma que esta jodiendo . Si se enchufa algo se cortaba la luz. (Foto adjunta).
-- [ ] 3  reforzar las tapas de los tomas y llaves. Especialmente los de la cocina que se salen permanentemente. La pifiaron en el corte de las ceramicas creo.(Foto adjunta).
-- [ ] luces en el fondo arriba de la parri (ver foto)
-- [ ] contra el arbol que se comparte con el vecino poner 2, un aplique tipo antiguo que esta ahi en la casa para que prenda con una fotocelula. 
+- [x] reubicar dos cámaras de video ✅ 2026-03-10
+- [x] cablear desde la tecla que da luz a la luminaria que está al lado de las cámaras para independizar alimentación. ✅ 2026-03-10
+- [x] colocar fotocélula a las luminarias del frente (foto adjunta). Remplazar focos defectuosos, solo los que apuntan para abajo. ✅ 2026-03-10
+- [x] En el living hay un toma que esta jodiendo . Si se enchufa algo se cortaba la luz. (Foto adjunta). ✅ 2026-03-10
+- [x] 3  reforzar las tapas de los tomas y llaves. Especialmente los de la cocina que se salen permanentemente. La pifiaron en el corte de las ceramicas creo.(Foto adjunta). ✅ 2026-03-10
+- [x] luces en el fondo arriba de la parri (ver foto) ✅ 2026-03-10
+- [x] contra el arbol que se comparte con el vecino poner 2, un aplique tipo antiguo que esta ahi en la casa para que prenda con una fotocelula. ✅ 2026-03-10
 Ademas poner un reflector que esta tambien en la casa para prenderlo cuando se quiera, y que este protegida de la lluvia 
 
 # 📦 Materiales

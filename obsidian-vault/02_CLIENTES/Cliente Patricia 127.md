@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono: +54 9 221 436-4960
 dirección_fija: 127 e/77 y 78
-zona:
+zona: 
 categoría: 🟢 Particular
 ---
 

@@ -1158,8 +1158,17 @@ async def cmd_mapa(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     import os, re, requests, time
 
     CLIENTES = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault/02_CLIENTES"
-    clientes = {}
 
+    colores = {
+        "centro":    "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        "berisso":   "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        "periferia": "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+        "norte":     "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+        "sur":       "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
+        "default":   "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+    }
+
+    clientes = {}
     for f in os.listdir(CLIENTES):
         if not f.endswith(".md"): continue
         nombre = f.replace("Cliente ","").replace(".md","")
@@ -1171,13 +1180,17 @@ async def cmd_mapa(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         direccion = m_dir.group(1).strip().strip('"')
         if not direccion or len(direccion) < 4: continue
 
+        m_zona = re.search(r"zona:\s*(.+)", texto, re.IGNORECASE)
+        zona = m_zona.group(1).strip().lower() if m_zona else "default"
+        if not zona: zona = "default"
+
         m_lat = re.search(r"lat:\s*([-\d\.]+)", texto)
         m_lon = re.search(r"lon:\s*([-\d\.]+)", texto)
 
         if m_lat and m_lon:
             lat = float(m_lat.group(1))
             lon = float(m_lon.group(1))
-            clientes[nombre] = (direccion, lat, lon)
+            clientes[nombre] = (direccion, lat, lon, zona)
         else:
             try:
                 time.sleep(1.5)
@@ -1192,7 +1205,7 @@ async def cmd_mapa(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 if data:
                     lat = float(data[0]["lat"])
                     lon = float(data[0]["lon"])
-                    clientes[nombre] = (direccion, lat, lon)
+                    clientes[nombre] = (direccion, lat, lon, zona)
                     with open(path_c, "r", encoding="utf-8") as fh:
                         fc = fh.read()
                     if "lat:" not in fc:
@@ -1209,128 +1222,36 @@ async def cmd_mapa(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("No hay clientes con direccion registrada.")
         return
 
-    kml_items = ""
-    for nombre, (direccion, lat, lon) in clientes.items():
-        kml_items += "<Placemark><name>" + nombre + "</name><description>" + direccion + "</description><Point><coordinates>" + str(lon) + "," + str(lat) + ",0</coordinates></Point></Placemark>"
+    # Estilos por zona
+    estilos = ""
+    for zona, icono in colores.items():
+        estilos += "<Style id=\"" + zona + "\"><IconStyle><Icon><href>" + icono + "</href></Icon></IconStyle></Style>"
 
-    kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>Clientes Dario</name>" + kml_items + "</Document></kml>"
+    kml_items = ""
+    for nombre, (direccion, lat, lon, zona) in clientes.items():
+        zona_key = zona if zona in colores else "default"
+        kml_items += "<Placemark><name>" + nombre + "</name><description>" + direccion + " (" + zona + ")</description><styleUrl>#" + zona_key + "</styleUrl><Point><coordinates>" + str(lon) + "," + str(lat) + ",0</coordinates></Point></Placemark>"
+
+    kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>Clientes Dario</name>" + estilos + kml_items + "</Document></kml>"
 
     output = "/data/data/com.termux/files/home/clientes_mapa.kml"
     with open(output, "w", encoding="utf-8") as f:
         f.write(kml)
 
+    # Resumen por zona
+    zonas_count = {}
+    for _, (_, _, _, z) in clientes.items():
+        zonas_count[z] = zonas_count.get(z, 0) + 1
+    resumen = "\n".join([f"  {z}: {n}" for z, n in sorted(zonas_count.items())])
+
     with open(output, "rb") as f:
         await update.message.reply_document(
             document=f,
             filename="clientes_dario.kml",
-            caption="Mapa de clientes — " + str(len(clientes)) + " ubicaciones\nAbrilo con Google Maps u OsmAnd"
+            caption="Mapa de clientes — " + str(len(clientes)) + " ubicaciones\n\n" + resumen + "\n\nAbrilo con Google Maps u OsmAnd"
         )
     os.remove(output)
 
-
-#!/usr/bin/env python3
-import os, re, logging
-
-# Cargar variables de entorno
-_env = "/storage/emulated/0/Documents/Dario-electricista-pro/.env"
-if os.path.exists(_env):
-    with open(_env) as _f:
-        for _l in _f:
-            if "=" in _l and not _l.startswith("#"):
-                k, v = _l.strip().split("=", 1)
-                os.environ[k] = v
-try:
-    from dotenv import load_dotenv
-    load_dotenv("/storage/emulated/0/Documents/Dario-electricista-pro/.env")
-except: pass
-from datetime import date, datetime
-from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
-
-# Config
-TOKEN = "8785612653:AAHEbPWEqF2ytJuueOI_S1LMBIAwN_qj7mI"
-CHAT_ID = 922023252
-VAULT = "/storage/emulated/0/Documents/Dario-electricista-pro/obsidian-vault"
-TRABAJOS = f"{VAULT}/01_TRABAJOS"
-LOG_FILE = f"{VAULT}/09_SCRIPTS/registro_bot.md"
-
-logging.basicConfig(level=logging.WARNING)
-
-# ─── UTILIDADES ─────────────────────────────────────────
-
-def parse_fm(contenido):
-    data = {}
-    m = re.match(r"^---\n(.*?)\n---", contenido, re.DOTALL)
-    if not m:
-        return data
-    for linea in m.group(1).split("\n"):
-        kv = re.match(r"^(\w+):\s*(.*)$", linea)
-        if kv:
-            v = kv.group(2).strip().strip('"')
-            v = re.sub(r"\[\[.*?\|(.+?)\]\]", r"\1", v)
-            v = re.sub(r"\[\[(.+?)\]\]", r"\1", v)
-            data[kv.group(1)] = v
-    return data
-
-def get_trabajos():
-    trabajos = []
-    for root, dirs, files in os.walk(TRABAJOS):
-        dirs[:] = [d for d in dirs if d != "fotos"]
-        for archivo in files:
-            if not archivo.endswith(".md"):
-                continue
-            try:
-                with open(os.path.join(root, archivo), "r", encoding="utf-8") as f:
-                    contenido = f.read()
-                data = parse_fm(contenido)
-                if data.get("tipo") == "trabajo":
-                    cliente = data.get("cliente", "")
-                    if "/" in cliente:
-                        cliente = cliente.split("/")[-1]
-                    data["cliente"] = cliente
-                    data["_archivo"] = archivo
-                    trabajos.append(data)
-            except:
-                pass
-    return trabajos
-
-def fmt_pesos(n):
-    try:
-        return f"${int(n):,}".replace(",", ".")
-    except:
-        return "$0"
-
-def log_evento(evento):
-    """Guarda evento en el registro del vault."""
-    hoy = datetime.now().strftime("%Y-%m-%d %H:%M")
-    linea = f"| {hoy} | {evento} |\n"
-    try:
-        os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-        if not os.path.exists(LOG_FILE):
-            with open(LOG_FILE, "w") as f:
-                f.write("# Registro del Bot\n\n| Fecha | Evento |\n|---|---|\n")
-        with open(LOG_FILE, "a") as f:
-            f.write(linea)
-    except:
-        pass
-
-
-def get_stats():
-    trabajos = get_trabajos()
-    mes = date.today().strftime("%Y-%m")
-    activos = [t for t in trabajos if t.get("estado") in ["En curso","pendiente"]]
-    sin_cobrar = [t for t in trabajos if t.get("estado")=="terminado" and t.get("pagado")=="false"]
-    este_mes = [t for t in trabajos if t.get("fecha","")[:7]==mes]
-    return {
-        "activos": len(activos),
-        "sin_cobrar": len(sin_cobrar),
-        "total_mes": sum(int(t.get("mano_de_obra",0)) for t in este_mes),
-        "total_pendiente": sum(int(t.get("mano_de_obra",0)) for t in sin_cobrar),
-        "trabajos_activos": activos,
-        "trabajos_sin_cobrar": sin_cobrar,
-    }
-
-# ─── COMANDOS ───────────────────────────────────────────
 
 async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     msg = (

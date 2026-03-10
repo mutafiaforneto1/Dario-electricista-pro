@@ -4,7 +4,7 @@ dirección: Jorgelina122 e/77 y 78
 teléfono: +54 9 221 608-4940
 dirección_fija: Martin berisso
 teléfono 2: +54 9 221 600-6840
-zona:
+zona: Berisso
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

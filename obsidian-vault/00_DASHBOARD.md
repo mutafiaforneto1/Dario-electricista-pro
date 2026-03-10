@@ -8,69 +8,69 @@ aliases: [inicio, home, dashboard]
 
 ## 🔧 TRABAJOS ACTIVOS
 
-\`\`\`dataview
+```dataview
 TABLE cliente, mano_de_obra AS "Mano de obra", fecha
 FROM "01_TRABAJOS"
 WHERE estado = "En curso" OR estado = "pendiente"
 SORT fecha DESC
-\`\`\`
+```
 
 ---
 
 ## 💸 DINERO EN LA CALLE
 
-\`\`\`dataview
+```dataview
 TABLE cliente, mano_de_obra AS "Monto", fecha
 FROM "01_TRABAJOS"
 WHERE pagado = false AND estado = "terminado"
 SORT fecha ASC
-\`\`\`
+```
 
 ---
 
 ## 📋 PRESUPUESTOS PENDIENTES
 
-\`\`\`dataview
+```dataview
 TABLE cliente, mano_de_obra AS "Monto", fecha
 FROM "01_TRABAJOS"
 WHERE estado = "presupuesto"
 SORT fecha DESC
-\`\`\`
+```
 
 ---
 
 ## 📅 TRABAJOS DEL MES
 
-\`\`\`dataview
+```dataview
 TABLE cliente, estado, mano_de_obra AS "Monto", pagado
 FROM "01_TRABAJOS"
 WHERE date(fecha).month = date(today).month
   AND date(fecha).year = date(today).year
 SORT fecha DESC
-\`\`\`
+```
 
 ---
 
 ## 📓 DIARIO RECIENTE
 
-\`\`\`dataview
+```dataview
 LIST
 FROM "05_DIARIO"
 SORT file.name DESC
 LIMIT 5
-\`\`\`
+```
 
 ---
 
 ## 📊 RESUMEN DEL MES
 
-\`\`\`dataview
+```dataview
 TABLE sum(rows.mano_de_obra) AS "Total Facturado"
 FROM "01_TRABAJOS"
 WHERE date(fecha).month = date(today).month
   AND date(fecha).year = date(today).year
 GROUP BY true
-\`\`\`
+```
 
 ---
 

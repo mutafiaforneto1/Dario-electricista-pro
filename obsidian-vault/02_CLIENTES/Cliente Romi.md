@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 135 e/65 y 66
-zona:
+zona: 
 categoría: 🟢 Particular
 ---
 

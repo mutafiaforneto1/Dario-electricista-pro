@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 67 y 116
-zona:
+zona: Periferia
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija:
-zona: Mi barrio
+zona: 
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 123 e/ 63 y 64
-zona:
+zona: Centro
 categoría: 🟢 Particular
 ---
 

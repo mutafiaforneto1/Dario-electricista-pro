@@ -4,13 +4,13 @@ cliente: "[[Cliente Natalia]]"
 dirección: 67 y 116
 prioridad: 🔵 Media
 fecha: 2026-02-10
-estado: En curso
+estado: terminado
 mano_de_obra: 50000
-pagado: false
+pagado: true
 ---
 
 # 📋 Presupuesto y Tareas
-- [ ] toma de aire acondicionado 
+- [x] toma de aire acondicionado ✅ 2026-02-10
 
 # 📦 Materiales
 - 

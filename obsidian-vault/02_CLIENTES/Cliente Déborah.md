@@ -2,8 +2,9 @@
 tipo: cliente
 teléfono:
 dirección_fija: 49 e/131 y 132
-zona:
+zona: Centro
 categoría: 🟢 Particular
+direccion: Calle 77 y 25, La Plata
 ---
 
 # 👤 Datos del Cliente: Cliente Déborah

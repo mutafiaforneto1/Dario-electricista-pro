@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 3 e/ 68 y 69
-zona:
+zona: Centro
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 17 e/ 522 y 523 n945
-zona:
+zona: Centro
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

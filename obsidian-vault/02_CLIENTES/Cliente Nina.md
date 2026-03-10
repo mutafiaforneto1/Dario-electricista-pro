@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: 122bis e/77 y 78
-zona:
+zona: Berisso
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   

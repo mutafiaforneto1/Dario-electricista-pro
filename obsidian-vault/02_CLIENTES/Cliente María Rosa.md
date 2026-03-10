@@ -2,7 +2,7 @@
 tipo: cliente
 teléfono:
 dirección_fija: "125 Norte  #2113 entre 18 y 18 Este"
-zona:
+zona: 
 categoría: 🟢 Particular
 ---
 ## 🗂️    [[Tablero General]]   
