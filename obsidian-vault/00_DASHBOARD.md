@@ -4,74 +4,73 @@ aliases: [inicio, home, dashboard]
 
 # ⚡ Centro de Comando — Dario Electricista
 
-> Actualizado automáticamente por Dataview
-
 ---
 
 ## 🔧 TRABAJOS ACTIVOS
 
-```dataview
-TABLE cliente, mano_de_obra, fecha
+\`\`\`dataview
+TABLE cliente, mano_de_obra AS "Mano de obra", fecha
 FROM "01_TRABAJOS"
-WHERE estado = "activo" OR estado = "en curso"
+WHERE estado = "En curso" OR estado = "pendiente"
 SORT fecha DESC
-```
+\`\`\`
 
 ---
 
 ## 💸 DINERO EN LA CALLE
 
-```dataview
-TABLE cliente, mano_de_obra, fecha
+\`\`\`dataview
+TABLE cliente, mano_de_obra AS "Monto", fecha
 FROM "01_TRABAJOS"
-WHERE pagado = false OR pagado = "no" OR pagado = "pendiente"
-SORT fecha DESC
-```
+WHERE pagado = false AND estado = "terminado"
+SORT fecha ASC
+\`\`\`
 
 ---
 
-## 📅 SEMANA ACTUAL
+## 📋 PRESUPUESTOS PENDIENTES
 
-```dataview
-TABLE file.day, cliente, estado
+\`\`\`dataview
+TABLE cliente, mano_de_obra AS "Monto", fecha
 FROM "01_TRABAJOS"
-WHERE file.day >= date(today) - dur(7 days)
-SORT file.day DESC
-```
+WHERE estado = "presupuesto"
+SORT fecha DESC
+\`\`\`
+
+---
+
+## 📅 TRABAJOS DEL MES
+
+\`\`\`dataview
+TABLE cliente, estado, mano_de_obra AS "Monto", pagado
+FROM "01_TRABAJOS"
+WHERE date(fecha).month = date(today).month
+  AND date(fecha).year = date(today).year
+SORT fecha DESC
+\`\`\`
 
 ---
 
 ## 📓 DIARIO RECIENTE
 
-```dataview
+\`\`\`dataview
 LIST
 FROM "05_DIARIO"
 SORT file.name DESC
 LIMIT 5
-```
-
----
-
-## 🎯 OBJETIVOS ACTIVOS
-
-```dataview
-LIST
-FROM "06_OBJETIVOS"
-WHERE estado != "completado"
-SORT file.mtime DESC
-```
+\`\`\`
 
 ---
 
 ## 📊 RESUMEN DEL MES
 
-```dataview
+\`\`\`dataview
 TABLE sum(rows.mano_de_obra) AS "Total Facturado"
 FROM "01_TRABAJOS"
 WHERE date(fecha).month = date(today).month
   AND date(fecha).year = date(today).year
 GROUP BY true
-```
+\`\`\`
 
 ---
 
@@ -81,7 +80,5 @@ GROUP BY true
 |---|---|
 | ➕ Nuevo trabajo | [[Nueva Plantilla Trabajo]] |
 | 👤 Nuevo cliente | [[Ficha cliente]] |
-| 💰 Registrar cobro | [[Control de cobros]] |
-| 📋 Historial | [[Historial de Trabajos]] |
-| 🔌 Info técnica | [[07_INFO_TECNICA/Canal de comunicacion electrica]] |
 | 💲 Precios | [[08_PRECIOS/Precios_Actualizados]] |
+| 🔌 Info técnica | [[07_INFO_TECNICA/Canal de comunicacion electrica]] |

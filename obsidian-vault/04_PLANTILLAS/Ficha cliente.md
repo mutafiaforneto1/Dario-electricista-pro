@@ -1,26 +1,52 @@
 ---
 tipo: cliente
-teléfono: 
-dirección_fija: 
-zona: 
-categoría: 🟢 Particular
+telefono: 
+direccion:
+zona:
+categoria: Particular
+pagador: bueno
 ---
-## 🗂️    [[Tablero General]]   
 
-# 👤 Datos del Cliente: {{title}}
-
-### 📞 Contacto y Ubicación
-- **Teléfono:** - **Dirección:** - **Google Maps:** [Link aquí]
-
-### ⚡ Detalles Técnicos del Domicilio
-- **Tipo de Conexión:** (Monofásica / Trifásica)
-- **Ubicación del Tablero Principal:** - **Estado de la Instalación:** (Nueva / Vieja / A reformar)
-- **Notas técnicas:** (Ej: "Tiene térmica general de 25A", "Falta puesta a tierra")
+# Cliente: {{title}}
 
 ---
-### 🛠️ Historial de Trabajos
-```dataview
-TABLE fecha, estado, mano_de_obra
+
+## Contacto
+- **Telefono:** 
+- **Direccion:** 
+- **Google Maps:** 
+
+---
+
+## Detalles Tecnicos
+- **Tipo de conexion:** Monofasica / Trifasica
+- **Tablero principal:** 
+- **Estado instalacion:** Nueva / Vieja / A reformar
+- **Notas tecnicas:** 
+
+---
+
+## Historial de Trabajos
+
+\`\`\`dataview
+TABLE fecha, estado, mano_de_obra AS "Monto", pagado
 FROM "01_TRABAJOS"
 WHERE cliente = this.file.link
 SORT fecha DESC
+\`\`\`
+
+---
+
+## Resumen Economico
+
+\`\`\`dataview
+TABLE sum(rows.mano_de_obra) AS "Total facturado"
+FROM "01_TRABAJOS"
+WHERE cliente = this.file.link
+GROUP BY true
+\`\`\`
+
+---
+
+## Notas
+
