@@ -34,3 +34,6 @@ Ademas poner un reflector que esta tambien en la casa para prenderlo cuando se q
 # 📝 Anotaciones
 (Detalles extra aquí)
 ![[IMG-20260120-WA0016.jpg]]![[IMG-20260120-WA0013.jpg]]![[IMG-20260120-WA0017.jpg]]![[IMG-20260120-WA0018.jpg]]![[IMG-20260120-WA0026.jpg]]![[IMG-20260120-WA0030.jpg]]![[IMG-20260120-WA0033.jpg]]
+
+## Pago
+Canje — estadía en Gualeguaychú

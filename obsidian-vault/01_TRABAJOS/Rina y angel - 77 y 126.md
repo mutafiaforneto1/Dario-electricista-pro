@@ -1,6 +1,6 @@
 ---
 tipo: trabajo
-cliente: Rina y angel
+cliente: "[[Rina y Angel]]"
 direccion: 77 y 126
 fecha_inicio: 2026-03-02
 estado: presupuesto
@@ -13,6 +13,8 @@ mano_de_obra: 0
 
 ## Descripción
 Instalación de cañerías y cajas de (tomas y luces)
+Instalación eléctrica de baño, Cocina, iluminación general
 
 ## Notas
 - Creado desde Telegram el 2026-03-02
+![[IMG_20260309_103943_330.jpg]]![[IMG_20260309_104536_856.jpg]]
