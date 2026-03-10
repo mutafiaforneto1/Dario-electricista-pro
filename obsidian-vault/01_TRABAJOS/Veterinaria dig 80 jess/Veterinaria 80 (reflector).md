@@ -5,7 +5,7 @@ telefono: 54911xxxxxxxx
 prioridad: 🔵 Media
 fecha: 2026-03-04
 estado: En curso
-mano_de_obra: 0
+mano_de_obra: 40000
 costo_materiales: 0
 pagado: false
 ---

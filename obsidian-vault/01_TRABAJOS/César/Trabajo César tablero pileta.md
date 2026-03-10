@@ -4,7 +4,7 @@ cliente: "[[Cliente César]]"
 dirección: Campos de roca
 prioridad: 🔵 Media
 fecha: 2026-01-22
-estado: En curso
+estado: presupuesto curso
 mano_de_obra: 0
 pagado: false
 ---

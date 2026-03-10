@@ -1,2 +1,0 @@
-{lv=plata}
-{lv=cliente}

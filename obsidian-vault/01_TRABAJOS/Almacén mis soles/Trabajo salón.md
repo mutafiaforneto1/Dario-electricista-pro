@@ -4,7 +4,7 @@ cliente: "[[Cliente almacén mis soles]]"
 dirección:
 prioridad: 🔵 Media
 fecha: 2026-02-10
-estado: pendiente
+estado: presupuesto
 mano_de_obra: 0
 pagado: false
 fecha_cierre: 2026-02-23

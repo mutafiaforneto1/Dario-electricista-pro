@@ -2,7 +2,7 @@
 tipo: trabajo
 cliente: "[[Martín Berisso]]"
 fecha: 2026-03-09
-estado: En curso
+estado: En curso curso
 mano_de_obra: 0
 costo_materiales: 0
 pagado: false

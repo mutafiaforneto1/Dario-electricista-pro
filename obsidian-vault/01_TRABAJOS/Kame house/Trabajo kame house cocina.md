@@ -4,7 +4,7 @@ cliente: "[[Cliente kame house]]"
 dirección:
 prioridad: 🔵 Media
 fecha: 2026-02-04
-estado: pendiente
+estado: presupuesto
 mano_de_obra: 0
 pagado: false
 ---
