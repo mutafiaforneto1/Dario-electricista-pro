@@ -1,17 +1,17 @@
 ---
 tipo: trabajo
-cliente: "[[03_ADMIN/Cliente Tito]]"
+cliente: "[[Cliente Tito]]"
 dirección:
 prioridad: 🔵 Media
 fecha: 2026-02-04
-estado: pendiente
-mano_de_obra: 0
-pagado: false
+estado: terminado
+mano_de_obra: 25000
+pagado: true
 ---
 
 # 📋 Presupuesto y Tareas
-- [ ] colocar aplique
-- [ ] reparar portalampara y algo mas
+- [x] colocar aplique ✅ 2026-03-10
+- [x] reparar portalampara y algo mas ✅ 2026-03-10
 
 # 📦 Materiales
 - 

@@ -1,4 +1,5 @@
 ---
+direccion: Calle 67 y 135, La Plata
 tipo: cliente
 teléfono:
 dirección_fija: 135 e/65 y 66

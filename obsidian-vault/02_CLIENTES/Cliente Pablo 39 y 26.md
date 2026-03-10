@@ -1,4 +1,5 @@
 ---
+direccion: Calle 39 y 26, La Plata
 tipo: cliente
 teléfono:
 dirección_fija: 39 y 26

@@ -1,4 +1,5 @@
 ---
+direccion: Calle 123 entre 62 y 63, La Plata
 tipo: cliente
 teléfono:
 dirección_fija: 123 e/ 63 y 64

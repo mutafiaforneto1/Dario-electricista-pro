@@ -38,11 +38,11 @@ dolar_ref: 1310
 | set interruptor 2p superficie | $2,100 |
 
 ## Tableros
-| Material | Precio ARS |
-|---|---|
-| tablero din 6 bocas | $8,500 |
-| tablero din 12 bocas | $14,000 |
-| tablero din 24 bocas | $25,000 |
+| Material             | Precio ARS |
+| -------------------- | ---------- |
+| tablero din 6 bocas  | $85,000    |
+| tablero din 12 bocas | $140,000   |
+| tablero din 24 bocas | $250,000   |
 
 ## Otros
 | Material | Precio ARS |
