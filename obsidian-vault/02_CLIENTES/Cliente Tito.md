@@ -2,6 +2,9 @@
 tipo: cliente
 telefono:
 direccion: Calle 61 N461, La Plata
+lat: -34.9184693
+lon: -57.9368257
+link_maps: https://www.google.com/maps?q=-34.9184693,-57.9368257
 zona: Centro
 categoria: Particular
 ---

@@ -5,6 +5,9 @@ dirección_fija: 49 e/131 y 132
 zona: Centro
 categoría: 🟢 Particular
 direccion: Calle 77 y 25, La Plata
+lat: -34.9354757
+lon: -57.9242831
+link_maps: https://www.google.com/maps?q=-34.9354757,-57.9242831
 ---
 
 # 👤 Datos del Cliente: Cliente Déborah
