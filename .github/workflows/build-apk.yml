@@ -28,7 +28,7 @@ jobs:
       timeout-minutes: 60
       run: buildozer android debug
     - name: Subir APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: DarioElectricista-APK
         path: electroapp/bin/*.apk
