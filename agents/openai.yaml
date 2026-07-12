@@ -1,0 +1,4 @@
+name: dario-electricista
+display_name: Darío Electricista
+short_description: Sistema de gestión para electricista: WhatsApp, ClickUp, presupuestos
+default_prompt: "Ayudame con un presupuesto para un cliente"
