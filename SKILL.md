@@ -153,3 +153,30 @@ python3 scripts/clickup_buscar_presupuestos.py mica       # Por cliente
 python3 scripts/clickup_buscar_presupuestos.py 336        # Por monto
 python3 scripts/clickup_buscar_presupuestos.py            # Listar todos
 ```
+
+### Generador de Planos Eléctricos
+`scripts/generar_plano_electrico.py` - Crea diagramas SVG con símbolos eléctricos.
+
+```bash
+# Plano de instalación (con tablero, cables, toma AA)
+python3 scripts/generar_plano_electrico.py --tipo instalacion --archivo plano.svg --titulo "Trabajo X"
+
+# Diagrama de tablero (con circuitos)
+python3 scripts/generar_plano_electrico.py --tipo tablero --archivo tablero.svg
+
+# Diagrama de acometida (poste → medidor → casa)
+python3 scripts/generar_plano_electrico.py --tipo acometida --archivo acometida.svg --distancia 10
+```
+
+## Google Tasks Integration (v3.0)
+
+Cada mensaje de WhatsApp procesado ahora también crea una tarea en Google Tasks:
+
+- **⚡ Electricista La Plata** → contactos de trabajo, clientes
+- **🏠 Familia** → Carolina, escuela, hijos
+
+Las tareas aparecen automáticamente en Google Tasks y se sincronizan con Google Calendar.
+
+### Archivos
+- `scripts/procesar_whatsapp.py` — v3.0 con integración a Google Tasks
+- `/sdcard/Documents/gtasks_token.json` — Token de acceso (NO subir a GitHub)

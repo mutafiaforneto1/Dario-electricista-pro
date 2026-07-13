@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Procesador de WhatsApp Business para Darío Electricista v2.2
+Procesador de WhatsApp Business para Darío Electricista v3.0
 ============================================================
-Lee el log de MacroDroid, resume con Groq, postea a ClickUp
+Lee el log de MacroDroid, resume con Groq, postea a ClickUp + Google Tasks
 y guarda resúmenes visibles en /sdcard/Documents/WhatsApp Resumenes/
 
 Arquitectura:
   MacroDroid → /sdcard/whatsapp_trabajos.log
     → Groq IA (resumen)
     → ClickUp (tareas por contacto)
+    → Google Tasks (tareas por listas)
     → Carpeta visible /sdcard/Documents/WhatsApp Resumenes/ (archivos por contacto)
 
 Uso:
@@ -18,33 +19,39 @@ Uso:
   python3 procesar_whatsapp.py --init        # Inicializar carpeta en Android
 """
 
-import os, re, json, subprocess, sys, time, base64
+import os, re, json, subprocess, sys, time, base64, urllib.request, urllib.parse
 from datetime import datetime
 from collections import defaultdict
 
 # ═══ CONFIG ═══════════════════════════════════════════
 CLICKUP_TOKEN = os.environ.get("CLICKUP_TOKEN", "")
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY",
-    os.environ.get("GROQ_API_KEY", ""))
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 LOG_FILE = "/sdcard/whatsapp_trabajos.log"
 MARCA_FILE = "/tmp/.wa_mark"
 RESUMENES_DIR = "/sdcard/Documents/WhatsApp Resumenes"
 LOCAL_DIR = "/tmp/wa_resumenes"
+GOOGLE_TASKS_TOKEN_FILE = "/sdcard/Documents/gtasks_token.json"
 
-# Mapeo: patrón → (list_id_clickup, categoria, emoji, nombre_archivo)
+# IDs de las listas en Google Tasks (se crean con el setup)
+GOOGLE_TASKS_LISTS = {}
+_gt_token_cache = None
+
+# Mapeo: patrón → (list_id_clickup, categoria, emoji, nombre_archivo, google_tasks_list)
 MAP = {
-    "carolina":         ("901714997413", "personal", "❤️", "Carolina"),
-    "claudia":          ("901714936090", "cliente",  "👤", "Claudia"),
-    "evita":            ("901714997484", "familia",  "👧", "Evita"),
-    "jess":             ("901714936090", "cliente",  "👤", "Jess"),
-    "romina arias":     ("901714936090", "cliente",  "👤", "Romina Arias"),
-    "francisco":        ("901714997484", "familia",  "👦", "Francisco"),
-    "media 26":         ("901714999529", "escuela",  "🏫", "Media 26 - 2do 1ra"),
-    "6° 5°":            ("901714999529", "escuela",  "🏫", "6° 5° - Familias"),
-    "2do 1ra":          ("901714999530", "escuela",  "🏫", "2do 1ra"),
+    "carolina":         ("901714997413", "personal", "❤️", "Carolina", "Familia"),
+    "claudia":          ("901714936090", "cliente",  "👤", "Claudia", "Electricista"),
+    "evita":            ("901714997484", "familia",  "👧", "Evita", "Familia"),
+    "jess":             ("901714936090", "cliente",  "👤", "Jess", "Electricista"),
+    "romina arias":     ("901714936090", "cliente",  "👤", "Romina Arias", "Electricista"),
+    "francisco":        ("901714997484", "familia",  "👦", "Francisco", "Familia"),
+    "media 26":         ("901714999529", "escuela",  "🏫", "Media 26 - 2do 1ra", "Familia"),
+    "6° 5°":            ("901714999529", "escuela",  "🏫", "6° 5° - Familias", "Familia"),
+    "2do 1ra":          ("901714999530", "escuela",  "🏫", "2do 1ra", "Familia"),
+    "mica":             ("901714935828", "trabajo",  "👤", "Mica Hija Fabian", "Electricista"),
 }
 
 DEFAULT_ARCHIVO = "Clientes Varios"
+DEFAULT_GTASKS = "Electricista"
 SISTEMA = ("whatsapp business", "copia de seguridad", "no se pudo",
            "tu agente de ia", "mi num", "tú", "llamada")
 
@@ -52,10 +59,124 @@ SISTEMA = ("whatsapp business", "copia de seguridad", "no se pudo",
 def sh(cmd):
     try:
         r = subprocess.run(["shizuku", "sh", "-c", cmd],
-                           capture_output=True, text=True, timeout=30)
-        return (r.stdout + r.stderr)
+                           capture_output=True, text=True, timeout=15)
+        out = r.stdout or ""
+        if not out.strip():
+            out = r.stderr or ""
+        return out
     except:
         return ""
+
+# ═══ GOOGLE TASKS ═════════════════════════════════════
+def gt_token():
+    global _gt_token_cache
+    if _gt_token_cache:
+        return _gt_token_cache
+    try:
+        with open(GOOGLE_TASKS_TOKEN_FILE) as f:
+            data = json.load(f)
+        _gt_token_cache = data.get("access_token")
+        return _gt_token_cache
+    except:
+        return None
+
+def gt_refresh_token():
+    """Refresh the access token if expired"""
+    global _gt_token_cache
+    try:
+        with open(GOOGLE_TASKS_TOKEN_FILE) as f:
+            data = json.load(f)
+        refresh = data.get("refresh_token")
+        if not refresh:
+            return False
+        body = urllib.parse.urlencode({
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+            "client_secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+            "refresh_token": refresh,
+            "grant_type": "refresh_token"
+        }).encode()
+        req = urllib.request.Request("https://oauth2.googleapis.com/token", data=body,
+            headers={"Content-Type": "application/x-www-form-urlencoded"})
+        resp = urllib.request.urlopen(req)
+        new = json.loads(resp.read())
+        data["access_token"] = new["access_token"]
+        if "refresh_token" in new:
+            data["refresh_token"] = new["refresh_token"]
+        with open(GOOGLE_TASKS_TOKEN_FILE, "w") as f:
+            json.dump(data, f)
+        _gt_token_cache = new["access_token"]
+        return True
+    except:
+        return False
+
+def gt_call(method, url, data=None):
+    """Make API call to Google Tasks"""
+    token = gt_token()
+    if not token:
+        return None
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    d = json.dumps(data).encode() if data else None
+    try:
+        req = urllib.request.Request(url, data=d, headers=headers, method=method)
+        resp = urllib.request.urlopen(req)
+        return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        if e.code == 401:
+            if gt_refresh_token():
+                return gt_call(method, url, data)
+        return None
+    except:
+        return None
+
+def gt_ensure_list(list_name):
+    """Find or create a Google Tasks list by name"""
+    if list_name in GOOGLE_TASKS_LISTS:
+        return GOOGLE_TASKS_LISTS[list_name]
+    
+    # List all existing task lists
+    lists = gt_call("GET", "https://tasks.googleapis.com/tasks/v1/users/@me/lists")
+    if lists and "items" in lists:
+        for lst in lists["items"]:
+            GOOGLE_TASKS_LISTS[lst["title"]] = lst["id"]
+            if list_name == lst["title"]:
+                return lst["id"]
+    
+    # Create new list
+    result = gt_call("POST", "https://tasks.googleapis.com/tasks/v1/users/@me/lists",
+                     {"title": list_name})
+    if result and "id" in result:
+        GOOGLE_TASKS_LISTS[list_name] = result["id"]
+        return result["id"]
+    return None
+
+def gt_agregar_tarea(list_name, title, notes=""):
+    """Add a task to a Google Tasks list, avoiding duplicates"""
+    list_id = gt_ensure_list(list_name)
+    if not list_id:
+        print(f"  ⚠️ No se pudo crear/encontrar lista '{list_name}' en Google Tasks")
+        return False
+    
+    # Check for duplicates in the last 100 tasks
+    existing = gt_call("GET",
+        f"https://tasks.googleapis.com/tasks/v1/lists/{list_id}/tasks?maxResults=100")
+    if existing and "items" in existing:
+        for task in existing["items"]:
+            if task.get("title") == title and task.get("status") != "completed":
+                # Already exists, update notes if needed
+                if notes and task.get("notes") != notes:
+                    gt_call("PATCH",
+                        f"https://tasks.googleapis.com/tasks/v1/lists/{list_id}/tasks/{task['id']}",
+                        {"notes": notes})
+                return True
+    
+    # Create new task
+    result = gt_call("POST",
+        f"https://tasks.googleapis.com/tasks/v1/lists/{list_id}/tasks",
+        {"title": title, "notes": notes})
+    return result is not None
 
 # ═══ PARSER ═══════════════════════════════════════════
 def parse(raw):
@@ -77,7 +198,7 @@ def clasificar(sender):
     for pat, vals in MAP.items():
         if pat in s:
             return vals
-    return ("901714936090", "cliente", "👤", DEFAULT_ARCHIVO)
+    return ("901714936090", "cliente", "👤", DEFAULT_ARCHIVO, DEFAULT_GTASKS)
 
 # ═══ GROQ ═════════════════════════════════════════════
 _cache = {}
@@ -118,57 +239,40 @@ def cu(method, endpoint, data=None):
         return None
 
 def tarea(list_id, nombre, desc):
-    r = cu("POST", f"list/{list_id}/task",
-           {"name": nombre[:250], "description": desc[:5000], "not_all": True})
-    if r and "id" in r:
-        print(f"  ✅ ClickUp: {r['id']}")
-        return r["id"]
-    return None
+    r = cu("POST", f"list/{list_id}/task", {
+        "name": nombre[:497], "description": desc[:497]})
+    return r
 
 # ═══ CARPETA VISIBLE ══════════════════════════════════
+def init_carpetas():
+    for d in [LOCAL_DIR]:
+        os.makedirs(d, exist_ok=True)
+
 def leer_local(nombre_archivo):
-    """Lee archivo desde cache local"""
-    path = f"{LOCAL_DIR}/{nombre_archivo}.md"
+    path = os.path.join(LOCAL_DIR, f"{nombre_archivo}.md")
     try:
-        with open(path, "r") as f:
+        with open(path, encoding="utf-8") as f:
             return f.read()
     except:
-        return ""
+        return None
 
 def escribir_local(nombre_archivo, contenido):
-    """Escribe a cache local"""
-    os.makedirs(LOCAL_DIR, exist_ok=True)
-    path = f"{LOCAL_DIR}/{nombre_archivo}.md"
-    with open(path, "w") as f:
+    path = os.path.join(LOCAL_DIR, f"{nombre_archivo}.md")
+    with open(path, "w", encoding="utf-8") as f:
         f.write(contenido)
 
-def sync_a_android(nombre_archivo):
-    """Sincroniza un archivo del cache local a Android via base64"""
-    path_local = f"{LOCAL_DIR}/{nombre_archivo}.md"
-    path_and = f"{RESUMENES_DIR}/{nombre_archivo}.md"
-    try:
-        with open(path_local, "r") as f:
-            contenido = f.read()
-        encoded = base64.b64encode(contenido.encode()).decode()
-        sh(f'mkdir -p "{RESUMENES_DIR}"')
-        sh(f'echo "{encoded}" | base64 -d > "{path_and}"')
-    except:
-        pass
+def sincronizar(nombre_archivo):
+    destino = f"{RESUMENES_DIR}/{nombre_archivo}.md"
+    sh(f'cp "{os.path.join(LOCAL_DIR, nombre_archivo + ".md")}" "{destino}" 2>/dev/null')
+    sh(f'chmod 644 "{destino}" 2>/dev/null')
 
-def guardar_en_carpeta(sender, emoji, nombre_archivo, resumen):
-    """Agrega resumen al archivo del contacto"""
+def guardar_en_carpeta(sender, emoji, nombre_archivo, resumen_plano):
     ahora = datetime.now()
-    hoy = ahora.strftime("%d/%m/%Y")
+    hoy = ahora.strftime("%Y-%m-%d")
     hora = ahora.strftime("%H:%M")
     
-    # Aplanar resumen a una línea
-    resumen_plano = resumen.replace("\n", " | ").strip()
-    
-    # Leer actual
     actual = leer_local(nombre_archivo)
-    
-    if not actual.strip():
-        # Archivo nuevo
+    if actual is None:
         nuevo = f"# {emoji} {sender}\n\n"
         nuevo += f"## {hoy}\n"
         nuevo += f"- **{hora}** - {resumen_plano}\n"
@@ -181,7 +285,7 @@ def guardar_en_carpeta(sender, emoji, nombre_archivo, resumen):
             nuevo += f"- **{hora}** - {resumen_plano}\n"
     
     escribir_local(nombre_archivo, nuevo)
-    sync_a_android(nombre_archivo)
+    sincronizar(nombre_archivo)
     print(f"  📁 {nombre_archivo}.md")
 
 # ═══ MARCA ════════════════════════════════════════════
@@ -199,7 +303,7 @@ def guardar_marca(ts):
 # ═══ PROCESAR ═════════════════════════════════════════
 def procesar(test=False):
     print(f"\n{'='*55}")
-    print(f"📱 WhatsApp → Groq → ClickUp + Carpeta Visible")
+    print(f"📱 WhatsApp → Groq → ClickUp + Google Tasks + Carpeta")
     print(f"   {datetime.now():%Y-%m-%d %H:%M}")
     print(f"{'='*55}")
     
@@ -209,6 +313,11 @@ def procesar(test=False):
         return
     entries = parse(raw)
     print(f"📄 {len(entries)} entradas")
+    
+    # Check Google Tasks connectivity
+    has_gt = gt_token() is not None
+    if not has_gt:
+        print("ℹ️ Google Tasks no configurado (sin token)")
     
     if test:
         cols = [e for e in entries if not es_sistema(e["sender"]) and e["msg"]]
@@ -237,7 +346,7 @@ def procesar(test=False):
     
     total = 0
     for sender, msgs in sorted(grupos.items()):
-        lid, cat, emoji, archivo = clasificar(sender)
+        lid, cat, emoji, archivo, gt_list = clasificar(sender)
         textos = [m["msg"] for m in msgs[-3:] if m["msg"]]
         combined = " | ".join(textos)
         
@@ -249,21 +358,32 @@ def procesar(test=False):
         print(f"  📝 {summary}")
         
         if not test:
+            # ClickUp
             if lid:
                 print(f"  📋 ClickUp...")
                 tarea(lid, f"{emoji} {sender} - {ahora:%d/%m %H:%M}", summary)
+            
+            # Google Tasks
+            if has_gt:
+                task_title = f"{emoji} {sender} - {summary[:60]}"
+                if gt_agregar_tarea(gt_list, task_title, summary):
+                    print(f"  ✅ Google Tasks ({gt_list})")
+                else:
+                    print(f"  ⚠️ Google Tasks falló")
+            
+            # Carpeta visible
             guardar_en_carpeta(sender, emoji, archivo, summary)
         
         with open("/tmp/.wa_hechos", "a") as f:
             for m in msgs:
                 f.write(m["ts"] + "\n")
         total += len(msgs)
-        time.sleep(0.3)
+        time.sleep(0.5)  # Rate limiting
     
     if not test and pendientes:
         ultimo = max(e["ts"] for e in pendientes)
         guardar_marca(ultimo)
-        print(f"\n✅ {total} msgs → ClickUp + Carpeta. Marca: {ultimo}")
+        print(f"\n✅ {total} msgs -> ClickUp + GTasks + Carpeta. Marca: {ultimo}")
     else:
         print(f"\n✅ Test: {total} msgs")
 
@@ -279,15 +399,15 @@ def watch():
 
 # ═══ INIT ═════════════════════════════════════════════
 def init_android():
-    """Inicializa carpeta en Android"""
     sh(f'mkdir -p "{RESUMENES_DIR}"')
-    sh(f'touch "{RESUMENES_DIR}/.nomedia"')  # Evita que aparezcan en galería
+    sh(f'touch "{RESUMENES_DIR}/.nomedia"')
     print(f"✅ Carpeta creada: {RESUMENES_DIR}")
-    print("   Los resúmenes aparecerán ahí automáticamente")
 
 # ═══ MAIN ═════════════════════════════════════════════
 if __name__ == "__main__":
     import requests
+    
+    init_carpetas()
     
     if "--init" in sys.argv:
         init_android()
@@ -302,7 +422,13 @@ if __name__ == "__main__":
         teams = cu("GET", "team")
         if teams and "teams" in teams:
             for t in teams["teams"]:
-                print(f"  ✅ {t['name']} (ID: {t['id']})")
+                print(f"  ✅ {t['name']}")
+        print("--- Google Tasks ---")
+        if gt_token():
+            lists = gt_call("GET", "https://tasks.googleapis.com/tasks/v1/users/@me/lists")
+            if lists and "items" in lists:
+                for lst in lists["items"]:
+                    print(f"  ✅ {lst['title']}")
         print("\n✅ Tests OK")
         sys.exit(0)
     

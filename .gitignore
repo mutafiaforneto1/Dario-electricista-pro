@@ -1,0 +1,13 @@
+# API Keys & Secrets
+*.token.json
+.env
+gtasks_token.json
+/sdcard/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
