@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
-Procesador de WhatsApp Business para Darío Electricista v3.0
+Procesador de WhatsApp Business para Darío Electricista v4.0
 ============================================================
-Lee el log de MacroDroid, resume con Groq, postea a ClickUp + Google Tasks
+Lee el log de MacroDroid, resume con Groq, postea a Notion + ClickUp + Google Tasks
 y guarda resúmenes visibles en /sdcard/Documents/WhatsApp Resumenes/
 
 Arquitectura:
   MacroDroid → /sdcard/whatsapp_trabajos.log
     → Groq IA (resumen)
-    → ClickUp (tareas por contacto)
-    → Google Tasks (tareas por listas)
+    → Notion (base de datos principal)
+    → ClickUp (respaldo)
+    → Google Tasks (recordatorios)
     → Carpeta visible /sdcard/Documents/WhatsApp Resumenes/ (archivos por contacto)
 
 Uso:
@@ -26,6 +27,13 @@ from collections import defaultdict
 # ═══ CONFIG ═══════════════════════════════════════════
 CLICKUP_TOKEN = os.environ.get("CLICKUP_TOKEN", "")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+NOTION_TOKEN = os.environ.get("NOTION_TOKEN", "")
+
+# Notion Database IDs
+NOTION_TRAJOS_DB = "71872a30-fc98-4938-b199-2acbef5c4a4f"
+NOTION_CLIENTES_DB = "39dfaa44-15dc-81b8-8e27-c7c4f0c85e06"
+NOTION_CALENDARIO_DB = "39dfaa44-15dc-8190-8f53-f529da913a04"
+NOTION_PRESUPUESTOS_DB = "39dfaa44-15dc-814a-b8b5-d05d254988e8"
 LOG_FILE = "/sdcard/whatsapp_trabajos.log"
 MARCA_FILE = "/tmp/.wa_mark"
 RESUMENES_DIR = "/sdcard/Documents/WhatsApp Resumenes"
@@ -288,6 +296,121 @@ def guardar_en_carpeta(sender, emoji, nombre_archivo, resumen_plano):
     sincronizar(nombre_archivo)
     print(f"  📁 {nombre_archivo}.md")
 
+# ═══ NOTION ════════════════════════════════════════════
+def notion(method, endpoint, data=None):
+    """Call Notion API"""
+    if not NOTION_TOKEN:
+        return None
+    url = f"https://api.notion.com/v1/{endpoint}"
+    headers = {
+        "Authorization": f"Bearer {NOTION_TOKEN}",
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json"
+    }
+    try:
+        body = json.dumps(data).encode() if data else None
+        req = urllib.request.Request(url, data=body, headers=headers, method=method)
+        resp = urllib.request.urlopen(req)
+        return json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode() if e.fp else ""
+        if "conflict" in error_body.lower():
+            return {"_conflict": True}
+        print(f"  ⚠️ Notion error {e.code}: {error_body[:100]}")
+        return None
+    except Exception as e:
+        print(f"  ⚠️ Notion exception: {e}")
+        return None
+
+def notion_create_or_update(db_id, search_key, title_field, properties, categoria):
+    """Create or update a Notion page. Deduplicates by title."""
+    # Search existing pages by title
+    query = {
+        "filter": {
+            "property": title_field,
+            "title": {"contains": search_key[:50]}
+        }
+    }
+    existing = notion("POST", f"databases/{db_id}/query", query)
+    
+    if existing and existing.get("results"):
+        page = existing["results"][0]
+        page_id = page["id"]
+        # Update the page
+        result = notion("PATCH", f"pages/{page_id}", {"properties": properties})
+        if result and not result.get("_conflict"):
+            print(f"  📝 Notion: actualizado")
+            return True
+        return False
+    else:
+        # Create new page
+        new_page = {
+            "parent": {"type": "database_id", "database_id": db_id},
+            "properties": properties
+        }
+        result = notion("POST", "pages", new_page)
+        if result and result.get("id"):
+            print(f"  📝 Notion: creado")
+            return True
+        return False
+
+def notion_agregar_contacto(sender, resumen, categoria, emoji):
+    """Add or update a contact in Notion Clientes DB"""
+    props = {
+        "Cliente": {"title": [{"text": {"content": sender[:2000]}}]},
+        "Estado": {"select": {"name": "🟢 Activo"}},
+        "Notas": {"rich_text": [{"text": {"content": resumen[:2000]}}]}
+    }
+    return notion_create_or_update(
+        NOTION_CLIENTES_DB, sender, "Cliente", props, categoria
+    )
+
+def notion_agregar_trabajo(sender, resumen, categoria, emoji):
+    """Add a work entry in Notion Trabajos DB"""
+    ahora = datetime.now()
+    props = {
+        "Trabajo": {"title": [{"text": {"content": f"{emoji} {sender} - {ahora:%d/%m %H:%M}"[:2000]}}]},
+        "Descripción del trabajo": {"rich_text": [{"text": {"content": resumen[:2000]}}]},
+        "Estado": {"select": {"name": "Pendiente"}},
+        "Categoría": {"select": {"name": "📋 Presupuesto" if "presup" in resumen.lower() else "⚡ Instalación"}}
+    }
+    return notion_create_or_update(
+        NOTION_TRAJOS_DB, sender, "Trabajo", props, categoria
+    )
+
+def notion_agregar_calendario(sender, resumen, categoria, emoji):
+    """Add a calendar event in Notion Calendar DB"""
+    tipo_map = {
+        "personal": "❤️ Personal",
+        "familia": "👧 Hijos",
+        "escuela": "🏫 Escuela",
+        "trabajo": "⚡ Trabajo",
+        "cliente": "⚡ Trabajo"
+    }
+    tipo = tipo_map.get(categoria, "⚡ Trabajo")
+    props = {
+        "Título": {"title": [{"text": {"content": f"{emoji} {sender} - {resumen[:100]}"[:2000]}}]},
+        "Tipo": {"select": {"name": tipo}},
+        "Notas": {"rich_text": [{"text": {"content": resumen[:2000]}}]},
+        "Estado": {"select": {"name": "Pendiente"}}
+    }
+    return notion_create_or_update(
+        NOTION_CALENDARIO_DB, sender, "Título", props, categoria
+    )
+
+def notion_procesar_mensaje(sender, resumen, categoria, emoji):
+    """Route message to appropriate Notion databases"""
+    if not NOTION_TOKEN:
+        return
+    
+    if categoria == "cliente":
+        notion_agregar_contacto(sender, resumen, categoria, emoji)
+        notion_agregar_trabajo(sender, resumen, categoria, emoji)
+    elif categoria == "trabajo":
+        notion_agregar_trabajo(sender, resumen, categoria, emoji)
+    else:
+        notion_agregar_calendario(sender, resumen, categoria, emoji)
+
 # ═══ MARCA ════════════════════════════════════════════
 def leer_marca():
     try:
@@ -358,12 +481,17 @@ def procesar(test=False):
         print(f"  📝 {summary}")
         
         if not test:
-            # ClickUp
+            # Notion (base de datos principal)
+            if NOTION_TOKEN:
+                print(f"  📝 Notion...")
+                notion_procesar_mensaje(sender, summary, cat, emoji)
+            
+            # ClickUp (respaldo)
             if lid:
                 print(f"  📋 ClickUp...")
                 tarea(lid, f"{emoji} {sender} - {ahora:%d/%m %H:%M}", summary)
             
-            # Google Tasks
+            # Google Tasks (recordatorios)
             if has_gt:
                 task_title = f"{emoji} {sender} - {summary[:60]}"
                 if gt_agregar_tarea(gt_list, task_title, summary):
@@ -383,7 +511,7 @@ def procesar(test=False):
     if not test and pendientes:
         ultimo = max(e["ts"] for e in pendientes)
         guardar_marca(ultimo)
-        print(f"\n✅ {total} msgs -> ClickUp + GTasks + Carpeta. Marca: {ultimo}")
+        print(f"\n✅ {total} msgs -> Notion + ClickUp + GTasks + Carpeta. Marca: {ultimo}")
     else:
         print(f"\n✅ Test: {total} msgs")
 

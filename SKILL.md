@@ -3,180 +3,96 @@ name: dario-electricista
 description: >
   Sistema de gestión para Darío, electricista en La Plata.
   Procesa notificaciones de WhatsApp Business (vía MacroDroid + Groq IA),
-  gestiona clientes y trabajos en ClickUp, genera presupuestos,
-  y administra contactos. Usar cuando Darío pregunte sobre:
-  clientes, presupuestos, trabajos, mensajes de WhatsApp, tareas de ClickUp,
-  precios/tarifas, o gestión del negocio eléctrico.
+  gestiona clientes y trabajos en Notion + ClickUp + Google Tasks + Google Sheets,
+  genera presupuestos, y administra contactos.
 ---
 
-# Darío Electricista - Sistema de Gestión
+# Darío Electricista - Sistema de Gestión v4.0
 
-## Contexto
-- **Nombre:** Darío Díaz Gonzalez
-- **Rubro:** Electricista en La Plata, Buenos Aires
-- **Novia:** Carolina (contacto personal ❤️)
-- **Hijos:** Evita<3, Francisco (school contacts 🏫)
-- **Idioma:** Español argentino, tono casual/amistoso
-
-## Arquitectura del Sistema
+## Arquitectura (4 Herramientas)
 
 ```
-MacroDroid → /sdcard/whatsapp_trabajos.log
-  → Groq IA (resumen)
-  → ClickUp (tareas por contacto)
-  → /sdcard/Documents/WhatsApp Resumenes/ (archivos por contacto)
+📱 WhatsApp Business → MacroDroid → /sdcard/whatsapp_trabajos.log
+    ↓
+🤖 Groq (resumen inteligente)
+    ↓
+    ├── 📝 Notion → BASE DE DATOS PRINCIPAL (clientes, trabajos, calendario)
+    ├── 🔧 ClickUp → RESPALDO (trabajos, seguimiento, IA)
+    ├── ✅ Google Tasks → TAREAS DIARIAS + RECORDATORIOS (sincronizado con Calendar)
+    └── 📁 Carpeta /sdcard/Documents/WhatsApp Resumenes/ → textos planos
 ```
 
-## ClickUp Workspace
+### Regla de ruteo de WhatsApp
 
-- **Team Space ID:** 90175555536
-- **Folder:** ⚡ Electricista La Plata (90179652315)
+| Contacto | Notion | ClickUp | Google Tasks |
+|----------|--------|---------|-------------|
+| Clientes (Claudia, Jess, Romina, etc.) | ✅ Trabajo + Cliente | ✅ Como tarea | ✅ Recordatorio |
+| Carolina | ✅ Calendario ❤️ | ❌ | ✅ Recordatorio ❤️ |
+| Evita, Francisco | ✅ Calendario 👧👦 | ❌ | ✅ Recordatorio 👧👦 |
+| Escuela (6°5°, 2do1ra) | ✅ Calendario 🏫 | ❌ | ✅ Recordatorio 🏫 |
+| Números nuevos | ✅ Como cliente | ✅ Como cliente | ✅ Recordatorio |
 
-### Listas Principales
+## Notion → Base de Datos Principal
+
+Token: `NOTION_TOKEN` en `/sdcard/Documents/.dario_env`
+
+| Base de datos | ID | Uso |
+|---------------|-----|------|
+| 📋 Trabajos de Electricidad | `71872a30-fc98-4938-b199-2acbef5c4a4f` | Trabajos activos, presupuestos |
+| 👥 Clientes | `39dfaa44-15dc-81b8-8e27-c7c4f0c85e06` | Contactos, teléfonos, zonas |
+| 💰 Presupuestos | `39dfaa44-15dc-814a-b8b5-d05d254988e8` | Detalle materiales, mano de obra |
+| 📅 Calendario y Recordatorios | `39dfaa44-15dc-8190-8f53-f529da913a04` | Eventos, llamadas |
+| 💵 Tarifas de Referencia | `39dfaa44-15dc-8144-935f-c47053da483f` | Lista de precios |
+
+## ClickUp → Respaldo
+
+Token: `CLICKUP_TOKEN` en `/sdcard/Documents/.dario_env`
+
 | Lista | ID | Uso |
-|-------|-----|-----|
-| 📋 Trabajos | 901714935828 | Trabajos activos y presupuestos |
-| 👥 Clientes | 901714936090 | Registro de clientes |
-| 💰 Tarifas de Referencia | 901714936121 | Precios de materiales y servicios |
-| ✅ Trabajos Completados | 901714936124 | Historial de trabajos |
-| ❤️ Carolina | 901714997413 | Contacto personal |
-| 🏫 Escuela (Eva y Fran) | 901714997484 | Grupos escolares |
-| 🏫 6° 5° - Familias | 901714999529 | Grupo escolar |
-| 🏫 2do 1ra | 901714999530 | Grupo escolar |
-
-### Campos Customizados
-| Campo | ID | Tipo |
 |-------|-----|------|
-| Dirección | 3fd8fe05-7a43-4b22-abf2-c1a2e21c5fdf | short_text |
-| Monto Cobrado | 724140ff-981b-4da7-8cde-3c9900196220 | currency (ARS) |
-| Teléfono | 74257df9-3d0f-438b-bd73-15a2f15e5cf1 | phone |
-| 🏞️ Zona | 0e343b1a-0f44-4b4b-9156-460dc37b542e | dropdown |
+| 📋 Trabajos | 901714935828 | Trabajos activos |
+| 👥 Clientes | 901714936090 | Contactos |
+| 💰 Tarifas | 901714936121 | Precios |
+| ✅ Completados | 901714936124 | Historial |
 
-## Mapeo de Contactos WhatsApp → ClickUp
+## Google Tasks → Recordatorios (sincronizado con Calendar)
 
-| Patrón | Lista | Categoría | Emoji |
-|--------|-------|-----------|-------|
-| carolina | ❤️ Carolina | personal | ❤️ |
-| claudia | 👥 Clientes | cliente | 👤 |
-| evita | 🏫 Escuela | familia | 👧 |
-| francisco | 🏫 Escuela | familia | 👦 |
-| jess | 👥 Clientes | cliente | 👤 |
-| romina arias | 👥 Clientes | cliente | 👤 |
-| media 26 | 🏫 6° 5° | escuela | 🏫 |
-| 6° 5° | 🏫 6° 5° | escuela | 🏫 |
-| 2do 1ra | 🏫 2do 1ra | escuela | 🏫 |
+| Lista | Uso |
+|-------|------|
+| ⚡ Electricista La Plata | Trabajos, cobros, clientes |
+| 🏠 Familia | Carolina, hijos, escuela |
 
-**Ignorar:** whatsapp business, copia de seguridad, tú, llamadas, sistema
+## Google Sheets → Legacy
 
-## Tarifas de Referencia (actualizado 04/07)
+**Link:** [Planilla de Clientes](https://docs.google.com/spreadsheets/d/1QHNBPS3k8BTpkIBIA8yl7LssAvGF-wqJKbOSv0OGIgY/edit)
 
-### Servicios
-| Servicio | Precio |
-|----------|--------|
-| Boca eléctrica (térmica o disyuntor) | $90.000 |
-| Visita para presupuesto | $20.000 (se descuenta si se concreta) |
-| Media jornada | Desde $45.000 |
-| Jornada completa | Desde $90.000 |
-| Instalación grande (1-2 días) | Desde $80.000 |
-| Urgencia | $80.000 |
+## API Keys
 
-### Materiales (referencia)
-| Material | Precio |
-|----------|--------|
-| Cable unipolar 2.5mm x metro | ~$987 |
-| Cable canal 20x10mm c/adhesivo x metro | ~$1.720 |
-| Bastidor oculto rectangular | ~$412 |
-| Tapa rectangular blanca | ~$451 |
-| Módulo 2 tomas + tierra | ~$2.220 |
-| Caja rectangular cable canal | ~$1.586 |
-
-## Generación de Presupuestos
-
-Cuando Darío pida armar un presupuesto:
-
-1. **Buscar datos del cliente** en ClickUp (lista 👥 Clientes)
-2. **Consultar tarifas** en lista 💰 Tarifas de Referencia
-3. **Armar presupuesto** con estructura:
-   - Datos del cliente (nombre, teléfono, dirección)
-   - Descripción del trabajo (detallada)
-   - Materiales (con cantidades y precios)
-   - Mano de obra (detallada por concepto)
-   - Resumen total con descuento de visita si aplica
-   - Condiciones (validez, pago, plazo)
-   - Aceptación del cliente
-4. **Crear tarea en ClickUp** (lista 📋 Trabajos)
-5. **Generar mensaje WhatsApp** listo para enviar
-
-### Plantilla de Presupuesto
-Ver `assets/presupuesto_template.md`
-
-## API Keys (NO committing a repos)
-
-Las keys están en variables de entorno o en el dispositivo:
-- **ClickUp:** `YOUR_CLICKUP_TOKEN`
-- **Groq:** `YOUR_GROQ_TOKEN`
-- **Telegram Bot:** `YOUR_TELEGRAM_TOKEN`
-- **Gemini:** `YOUR_GEMINI_TOKEN`
-- **OpenRouter:** `YOUR_OPENROUTER_TOKEN`
+Las keys están en `/sdcard/Documents/.dario_env`:
+- ClickUp, Groq, Notion, Google OAuth (Tasks + Sheets)
 
 ## Scripts
 
-### Procesador de WhatsApp
-`scripts/procesar_whatsapp.py` - Lee el log de MacroDroid, resume con Groq, postea a ClickUp y guarda resúmenes visibles.
-
-Uso:
 ```bash
-python3 scripts/procesar_whatsapp.py          # Modo normal
-python3 scripts/procesar_whatsapp.py --test   # Test sin guardar
-python3 scripts/procesar_whatsapp.py --watch  # Loop cada 60s
+# Procesar WhatsApp (crea en Notion + ClickUp + Tasks)
+source /sdcard/Documents/.dario_env && python3 scripts/procesar_whatsapp.py
+
+# Calculadora eléctrica
+python3 scripts/calculadora_electrica.py cable 20 380 10
+
+# Generar planos
+python3 scripts/generar_plano_electrico.py --tipo instalacion --archivo plano.svg
+
+# Limpiar duplicados en ClickUp
+python3 scripts/clickup_limpiar_duplicados.py
 ```
 
-## GitHub Backup
-- **Repo:** `https://github.com/mutafiaforneto1/Dario-electricista-pro` (privado)
-- Contiene: scripts, .env.example, README
+## Google Tasks Token
 
-## Scripts Adicionales
+El token OAuth2 está en: `/sdcard/Documents/gtasks_token.json`
 
-### Limpiar Duplicados de ClickUp
-`scripts/clickup_limpiar_duplicados.py` - Cierra tareas duplicadas, dejando solo la más reciente.
+## Respaldo GitHub
 
 ```bash
-python3 scripts/clickup_limpiar_duplicados.py --dry-run  # Ver qué se cerraría
-python3 scripts/clickup_limpiar_duplicados.py             # Ejecutar limpieza
+git clone https://github.com/mutafiaforneto1/Dario-electricista-pro.git
 ```
-
-### Buscar Presupuestos
-`scripts/clickup_buscar_presupuestos.py` - Busca presupuestos por cliente, monto o fecha.
-
-```bash
-python3 scripts/clickup_buscar_presupuestos.py mica       # Por cliente
-python3 scripts/clickup_buscar_presupuestos.py 336        # Por monto
-python3 scripts/clickup_buscar_presupuestos.py            # Listar todos
-```
-
-### Generador de Planos Eléctricos
-`scripts/generar_plano_electrico.py` - Crea diagramas SVG con símbolos eléctricos.
-
-```bash
-# Plano de instalación (con tablero, cables, toma AA)
-python3 scripts/generar_plano_electrico.py --tipo instalacion --archivo plano.svg --titulo "Trabajo X"
-
-# Diagrama de tablero (con circuitos)
-python3 scripts/generar_plano_electrico.py --tipo tablero --archivo tablero.svg
-
-# Diagrama de acometida (poste → medidor → casa)
-python3 scripts/generar_plano_electrico.py --tipo acometida --archivo acometida.svg --distancia 10
-```
-
-## Google Tasks Integration (v3.0)
-
-Cada mensaje de WhatsApp procesado ahora también crea una tarea en Google Tasks:
-
-- **⚡ Electricista La Plata** → contactos de trabajo, clientes
-- **🏠 Familia** → Carolina, escuela, hijos
-
-Las tareas aparecen automáticamente en Google Tasks y se sincronizan con Google Calendar.
-
-### Archivos
-- `scripts/procesar_whatsapp.py` — v3.0 con integración a Google Tasks
-- `/sdcard/Documents/gtasks_token.json` — Token de acceso (NO subir a GitHub)
