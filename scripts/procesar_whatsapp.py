@@ -2,15 +2,15 @@
 """
 Procesador de WhatsApp Business para Darío Electricista v4.0
 ============================================================
-Lee el log de MacroDroid, resume con Groq, postea a Notion + ClickUp + Google Tasks
+Lee el log de MacroDroid, resume con Groq, postea a ClickUp + Google Tasks + Notion
 y guarda resúmenes visibles en /sdcard/Documents/WhatsApp Resumenes/
 
 Arquitectura:
   MacroDroid → /sdcard/whatsapp_trabajos.log
     → Groq IA (resumen)
-    → Notion (base de datos principal)
-    → ClickUp (respaldo)
-    → Google Tasks (recordatorios)
+    → ClickUp (gestion principal)
+    → Google Tasks + Calendar (recordatorios)
+    → Notion (registro)
     → Carpeta visible /sdcard/Documents/WhatsApp Resumenes/ (archivos por contacto)
 
 Uso:
@@ -23,6 +23,19 @@ Uso:
 import os, re, json, subprocess, sys, time, base64, urllib.request, urllib.parse
 from datetime import datetime
 from collections import defaultdict
+
+# ═══ LOAD .dario_env ═════════════════════════════════
+def load_dario_env():
+    env_file = "/sdcard/Documents/.dario_env"
+    if os.path.exists(env_file):
+        with open(env_file) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, val = line.split("=", 1)
+                    os.environ.setdefault(key.strip(), val.strip())
+
+load_dario_env()
 
 # ═══ CONFIG ═══════════════════════════════════════════
 CLICKUP_TOKEN = os.environ.get("CLICKUP_TOKEN", "")
@@ -481,17 +494,12 @@ def procesar(test=False):
         print(f"  📝 {summary}")
         
         if not test:
-            # Notion (base de datos principal)
-            if NOTION_TOKEN:
-                print(f"  📝 Notion...")
-                notion_procesar_mensaje(sender, summary, cat, emoji)
-            
-            # ClickUp (respaldo)
+            # ClickUp (gestion principal)
             if lid:
                 print(f"  📋 ClickUp...")
                 tarea(lid, f"{emoji} {sender} - {ahora:%d/%m %H:%M}", summary)
             
-            # Google Tasks (recordatorios)
+            # Google Tasks + Calendar (recordatorios)
             if has_gt:
                 task_title = f"{emoji} {sender} - {summary[:60]}"
                 if gt_agregar_tarea(gt_list, task_title, summary):
@@ -501,6 +509,11 @@ def procesar(test=False):
             
             # Carpeta visible
             guardar_en_carpeta(sender, emoji, archivo, summary)
+            
+            # Notion (registro / backup)
+            if NOTION_TOKEN:
+                print(f"  📝 Notion...")
+                notion_procesar_mensaje(sender, summary, cat, emoji)
         
         with open("/tmp/.wa_hechos", "a") as f:
             for m in msgs:
@@ -511,7 +524,7 @@ def procesar(test=False):
     if not test and pendientes:
         ultimo = max(e["ts"] for e in pendientes)
         guardar_marca(ultimo)
-        print(f"\n✅ {total} msgs -> Notion + ClickUp + GTasks + Carpeta. Marca: {ultimo}")
+        print(f"\n✅ {total} msgs -> ClickUp + GTasks + Notion + Carpeta. Marca: {ultimo}")
     else:
         print(f"\n✅ Test: {total} msgs")
 
