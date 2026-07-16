@@ -59,22 +59,41 @@ _gt_token_cache = None
 
 # Mapeo: patrón → (list_id_clickup, categoria, emoji, nombre_archivo, google_tasks_list)
 MAP = {
-    "carolina":         ("901714997413", "personal", "❤️", "Carolina", "Familia"),
+    # === PERSONAL (NO crear tareas en ClickUp) ===
+    "carolina":         (None, "personal", "❤️", "Carolina", "Familia"),
+    "evita":            (None, "personal", "👧", "Evita", "Familia"),
+    "evita<3":          (None, "personal", "👧", "Evita", "Familia"),
+    "francisco":        (None, "personal", "👦", "Francisco", "Familia"),
+    "francisco pancho": (None, "personal", "👦", "Francisco", "Familia"),
+    "romina arias":     (None, "personal", "👤", "Romina Arias", None),
+    "ameos":            (None, "personal", "👥", "Ameos", None),
+    "tia sara":         (None, "personal", "❤️", "Tía Sara", None),
+    "mama":             (None, "personal", "❤️", "Mamá", None),
+    "papa":             (None, "personal", "❤️", "Papá", None),
+    
+    # === ESCUELA (solo recordatorios) ===
+    "media 26":         (None, "escuela",  "🏫", "Media 26 - 2do 1ra", "Familia"),
+    "6° 5°":            (None, "escuela",  "🏫", "6° 5° - Familias", "Familia"),
+    "2do 1ra":          (None, "escuela",  "🏫", "2do 1ra", "Familia"),
+    "e.s.m":            (None, "escuela",  "🏫", "E.S.M 26", "Familia"),
+    
+    # === CLIENTES Y TRABAJOS ===
     "claudia":          ("901714936090", "cliente",  "👤", "Claudia", "Electricista"),
-    "evita":            ("901714997484", "familia",  "👧", "Evita", "Familia"),
     "jess":             ("901714936090", "cliente",  "👤", "Jess", "Electricista"),
-    "romina arias":     ("901714936090", "cliente",  "👤", "Romina Arias", "Electricista"),
-    "francisco":        ("901714997484", "familia",  "👦", "Francisco", "Familia"),
-    "media 26":         ("901714999529", "escuela",  "🏫", "Media 26 - 2do 1ra", "Familia"),
-    "6° 5°":            ("901714999529", "escuela",  "🏫", "6° 5° - Familias", "Familia"),
-    "2do 1ra":          ("901714999530", "escuela",  "🏫", "2do 1ra", "Familia"),
+    "jésica":           ("901714936090", "cliente",  "👤", "Jésica", "Electricista"),
     "mica":             ("901714935828", "trabajo",  "👤", "Mica Hija Fabian", "Electricista"),
+    "cristian":         ("901714936090", "cliente",  "👤", "Cristian", "Electricista"),
+    "roberto":          ("901714936090", "cliente",  "👤", "Roberto", "Electricista"),
+    "monica":           ("901714936090", "cliente",  "👤", "Mónica Inmobiliaria", "Electricista"),
+    "super ale":        ("901714936090", "cliente",  "👤", "Super Ale", "Electricista"),
+    "tito":             ("901714936090", "cliente",  "👤", "Tito", "Electricista"),
+    "marcos":           ("901714936090", "cliente",  "👤", "Marcos Super", "Electricista"),
 }
 
 DEFAULT_ARCHIVO = "Clientes Varios"
 DEFAULT_GTASKS = "Electricista"
 SISTEMA = ("whatsapp business", "copia de seguridad", "no se pudo",
-           "tu agente de ia", "mi num", "tú", "llamada")
+           "tu agente de ia", "mi num", "tú", "llamada", "sending")
 
 # ═══ SHIZUKU ══════════════════════════════════════════
 def sh(cmd):
